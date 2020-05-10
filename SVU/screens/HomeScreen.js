@@ -46,7 +46,7 @@ export default function HomeScreen() {
 
         <View style={styles.helpContainer}>
           <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
+            <Text style={styles.helpLinkText}>Help references for creating a new expo app.</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
