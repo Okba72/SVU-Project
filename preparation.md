@@ -1,12 +1,12 @@
 # Environment Setup
-## Pre-requisits
+## Pre-requisit Dependencies
 - Install nodejs (version >= 14.*)
-- Install expo-cli
+- Install expo-cli with the following command:
 ```bash
  sudo npm install expo-cli --global 
 ```
-- install redis from this [link](http://redis.io)
-- install mongodb from this [link](http://mongodb.com/download-center/community)
+- install [redis](http://redis.io)
+- install [mongodb](http://mongodb.com/download-center/community)
 
 ## Dependencies Documentation
 | Dependency | Links |
@@ -15,7 +15,7 @@
 | mongodb driver | [Quick start](https://mongodb.github.io/node-mongodb-native/3.5/quick-start/quick-start/) |
 
 
-## Running the SVU project
+## Running the SVU Project
 To start the SVU project, navigate to the directory and run one of the following npm commands.
 
 ```bash
