@@ -1,0 +1,17 @@
+{
+    "logFile": "logs/app.log",
+    "maxLogFileSize": 20480000,
+    "backups": 3,
+    "globalLogLevel": "info",
+    "configurationRefreshPeriodMinutes": 1,
+    "loggers": [
+        {
+            "loggerName": "APPConfig",
+            "logLevel": "info"
+        },
+        {
+            "loggerName": "DustLRUCache",
+            "logLevel": "warn"
+        }
+    ]
+}

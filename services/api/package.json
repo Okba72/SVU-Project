@@ -1,0 +1,26 @@
+{
+  "name": "svuapi",
+  "version": "1.0.0",
+  "description": "A mongo-express-node REST server implementing the REST endpoints for the SVU project.",
+  "main": "./start_esm.js",
+  "scripts": {
+    "start": "node ./start_esm.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "REST",
+    "mongodb"
+  ],
+  "author": "Ouqbah Ismael",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "moment": "^2.26.0",
+    "mongodb": "^3.5.7",
+    "nconf": "^0.10.0",
+    "uuid": "^8.1.0",
+    "winston": "^3.2.1"
+  }
+}

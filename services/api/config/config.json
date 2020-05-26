@@ -1,0 +1,21 @@
+{
+    "port": 18000,
+    "app_root": "/svu/api",
+    "app_url_domain": "localhost.com",
+    "external_server_url": "https://localhost.svu.com:8443",
+    "pid_file_path": "/var/run/svu_app.pid",
+    "login_url": "https://localhost:19006/SVU/login",
+    "app": {
+        "session": {
+            "session_duration": 3600
+        },
+        "third_party_oauth": {},
+        "database": {
+            "host_seed": "localhost:27017",
+            "login_id": "sa_db_user",
+            "login_password": "sa_db_pwd",
+            "connect_retry_millies": 5000,
+            "database": "svudb"
+        }
+    }
+}

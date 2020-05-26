@@ -1,0 +1,146 @@
+{
+  message: 'Listening on 3000',
+  level: 'info',
+  label: 'APPConfig',
+  timestamp: '2020-05-26T06:03:56.975Z'
+}
+{
+  level: 'info',
+  message: 'Running in ',
+  label: 'APPConfig',
+  timestamp: '2020-05-26T06:05:33.363Z'
+}
+{
+  message: 'Listening on 3000',
+  level: 'info',
+  label: 'APPConfig',
+  timestamp: '2020-05-26T06:05:33.371Z'
+}
+{
+  message: 'Running in development mode',
+  level: 'info',
+  label: 'APPConfig',
+  timestamp: '2020-05-26T06:05:59.717Z'
+}
+{
+  message: 'Listening on 3000',
+  level: 'info',
+  label: 'APPConfig',
+  timestamp: '2020-05-26T06:05:59.725Z'
+}
+2020-05-26T06:10:47.015Z [APPConfig] info: Running in development mode
+2020-05-26T06:10:47.021Z [APPConfig] info: Listening on 3000
+2020-05-26T06:18:49.876Z [APPConfig] info: Running in development mode
+2020-05-26T06:18:49.882Z [APPConfig] info: Listening on 3000
+2020-05-26T06:19:21.986Z [APPConfig] warn: Running in development mode
+2020-05-26T06:19:21.993Z [APPConfig] info: Listening on 3000
+2020-05-26T06:21:11.971Z [APPConfig] [33mwarn[39m: Running in development mode
+2020-05-26T06:21:11.979Z [APPConfig] [32minfo[39m: Listening on 3000
+2020-05-26T06:22:03.674Z [APPConfig] [33mwarn[39m: Running in development mode
+2020-05-26T06:22:03.679Z [APPConfig] [32minfo[39m: Listening on 3000
+2020-05-26T06:24:54.888Z [APPConfig] [33mwarn[39m: Running in development mode
+2020-05-26T06:24:54.895Z [APPConfig] [32minfo[39m: Listening on 3000
+2020-05-26T06:25:21.458Z [APPConfig] [33mwarn[39m: Running in 
+2020-05-26T06:25:21.465Z [APPConfig] [32minfo[39m: Listening on 3000
+2020-05-26T06:26:21.658Z [APPConfig] [33mwarn[39m: Running in development mode
+2020-05-26T06:26:21.665Z [APPConfig] [32minfo[39m: Listening on 3000
+2020-05-26T06:27:23.303Z [APPConfig] [33mwarn[39m: Running in development mode
+2020-05-26T06:27:23.308Z [APPConfig] [32minfo[39m: Listening on port: 3000
+2020-05-26T06:27:49.469Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T06:27:49.473Z [APPConfig] [32minfo[39m: Listening on port: 3000
+2020-05-26T06:37:44.535Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T06:37:44.541Z [APPConfig] [32minfo[39m: Listening on port: 3000
+2020-05-26T06:38:24.413Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T06:38:24.418Z [APPConfig] [32minfo[39m: Listening on port: 3000
+2020-05-26T06:38:45.727Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T06:38:45.731Z [APPConfig] [32minfo[39m: Listening on port: 3000
+2020-05-26T06:38:55.848Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T06:38:55.852Z [APPConfig] [32minfo[39m: Listening on port: 3000
+2020-05-26T06:39:06.579Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T06:39:06.583Z [APPConfig] [32minfo[39m: Listening on port: 3000
+2020-05-26T06:43:00.957Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T06:43:00.961Z [APPConfig] [32minfo[39m: Listening on port: 3000
+2020-05-26T06:44:28.118Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T06:44:28.180Z [APPConfig] [32minfo[39m: APP configuration init in progress ....
+2020-05-26T06:44:28.180Z [APPConfig] [32minfo[39m: APP run_mode is: development APP deploy_mode is: development
+2020-05-26T06:44:28.180Z [APPConfig] [32minfo[39m: Backing stage hostname: 
+2020-05-26T06:44:28.180Z [APPConfig] [32minfo[39m: APP configuration init completed.
+2020-05-26T06:44:28.183Z [APPConfig] [32minfo[39m: Listening on port: 3000
+2020-05-26T06:45:25.189Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T06:45:25.241Z [APPConfig] [32minfo[39m: APP configuration init in progress ....
+2020-05-26T06:45:25.241Z [APPConfig] [32minfo[39m: APP run_mode is: development APP deploy_mode is: development
+2020-05-26T06:45:25.241Z [APPConfig] [32minfo[39m: Backing stage hostname: 
+2020-05-26T06:45:25.241Z [APPConfig] [32minfo[39m: APP configuration init completed.
+2020-05-26T06:45:25.243Z [APPConfig] [32minfo[39m: Listening on port: 3000
+2020-05-26T06:51:57.858Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T06:51:57.928Z [APPConfig] [32minfo[39m: APP configuration init in progress ....
+2020-05-26T06:51:57.929Z [APPConfig] [32minfo[39m: APP run_mode is: development APP deploy_mode is: development
+2020-05-26T06:51:57.929Z [APPConfig] [32minfo[39m: Backing stage hostname: 
+2020-05-26T06:51:57.929Z [APPConfig] [32minfo[39m: APP configuration init completed.
+2020-05-26T06:51:57.932Z [APPConfig] [32minfo[39m: Listening on port: 3000
+2020-05-26T06:53:42.708Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T06:53:42.767Z [APPConfig] [32minfo[39m: APP configuration init in progress ....
+2020-05-26T06:53:42.767Z [APPConfig] [32minfo[39m: APP run_mode is: development APP deploy_mode is: development
+2020-05-26T06:53:42.767Z [APPConfig] [32minfo[39m: Backing stage hostname: 
+2020-05-26T06:53:42.767Z [APPConfig] [32minfo[39m: APP configuration init completed.
+2020-05-26T06:53:42.770Z [APPConfig] [32minfo[39m: Listening on port: NaN
+2020-05-26T06:59:34.716Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T06:59:34.781Z [APPConfig] [32minfo[39m: APP configuration init in progress ....
+2020-05-26T06:59:34.781Z [APPConfig] [32minfo[39m: APP run_mode is: development APP deploy_mode is: development
+2020-05-26T06:59:34.781Z [APPConfig] [32minfo[39m: APP configuration init completed.
+2020-05-26T06:59:34.785Z [APPConfig] [32minfo[39m: Listening on port: NaN
+2020-05-26T07:01:03.327Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T07:01:03.368Z [APPConfig] [32minfo[39m: APP configuration init in progress ....
+2020-05-26T07:01:03.368Z [APPConfig] [32minfo[39m: APP run_mode is: development APP deploy_mode is: development
+2020-05-26T07:01:03.369Z [APPConfig] [32minfo[39m: APP configuration init completed.
+2020-05-26T07:01:03.371Z [APPConfig] [32minfo[39m: Listening on port: NaN
+2020-05-26T07:02:33.496Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T07:02:33.556Z [APPConfig] [32minfo[39m: APP configuration init in progress ....
+2020-05-26T07:02:33.556Z [APPConfig] [32minfo[39m: APP run_mode is: development APP deploy_mode is: development
+2020-05-26T07:02:33.557Z [APPConfig] [32minfo[39m: APP configuration init completed.
+2020-05-26T07:02:33.559Z [APPConfig] [32minfo[39m: Listening on port: NaN
+2020-05-26T07:03:11.641Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T07:03:11.710Z [APPConfig] [32minfo[39m: APP configuration init in progress ....
+2020-05-26T07:03:11.710Z [APPConfig] [32minfo[39m: APP run_mode is: development APP deploy_mode is: development
+2020-05-26T07:03:11.710Z [APPConfig] [32minfo[39m: APP configuration init completed.
+2020-05-26T07:03:11.713Z [APPConfig] [32minfo[39m: Listening on port: NaN
+2020-05-26T07:05:19.804Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T07:05:19.862Z [APPConfig] [32minfo[39m: APP configuration init in progress ....
+2020-05-26T07:05:19.862Z [APPConfig] [32minfo[39m: APP run_mode is: development APP deploy_mode is: development
+2020-05-26T07:05:19.862Z [APPConfig] [32minfo[39m: APP configuration init completed.
+2020-05-26T07:05:19.865Z [APPConfig] [32minfo[39m: Listening on port: 18000
+2020-05-26T07:06:08.415Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T07:06:08.480Z [APPConfig] [32minfo[39m: APP configuration init in progress ....
+2020-05-26T07:06:08.480Z [APPConfig] [32minfo[39m: APP run_mode is: development APP deploy_mode is: development
+2020-05-26T07:06:08.480Z [APPConfig] [32minfo[39m: APP configuration init completed.
+2020-05-26T07:06:08.483Z [APPConfig] [32minfo[39m: Listening on port: 18000
+2020-05-26T07:10:35.885Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T07:10:35.951Z [APPConfig] [32minfo[39m: APP configuration init in progress ....
+2020-05-26T07:10:35.951Z [APPConfig] [32minfo[39m: APP run_mode is: development APP deploy_mode is: development
+2020-05-26T07:10:35.951Z [APPConfig] [32minfo[39m: APP configuration init completed.
+2020-05-26T07:10:35.954Z [APPConfig] [32minfo[39m: Listening on port: 18000
+2020-05-26T07:46:55.466Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T07:46:55.513Z [APPConfig] [32minfo[39m: APP configuration init in progress ....
+2020-05-26T07:46:55.513Z [APPConfig] [32minfo[39m: APP run_mode is: development APP deploy_mode is: development
+2020-05-26T07:46:55.513Z [APPConfig] [32minfo[39m: APP configuration init completed.
+2020-05-26T07:46:55.517Z [APPConfig] [32minfo[39m: Listening on port: 18000
+2020-05-26T07:48:13.607Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T07:48:13.664Z [APPConfig] [32minfo[39m: APP configuration init in progress ....
+2020-05-26T07:48:13.664Z [APPConfig] [32minfo[39m: APP run_mode is: development APP deploy_mode is: development
+2020-05-26T07:48:13.664Z [APPConfig] [32minfo[39m: APP configuration init completed.
+2020-05-26T07:48:13.667Z [APPConfig] [32minfo[39m: Listening on port: 18000
+2020-05-26T08:08:45.101Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T08:08:45.161Z [APPConfig] [32minfo[39m: APP configuration init in progress ....
+2020-05-26T08:08:45.161Z [APPConfig] [32minfo[39m: APP run_mode is: development APP deploy_mode is: development
+2020-05-26T08:08:45.162Z [APPConfig] [32minfo[39m: APP configuration init completed.
+2020-05-26T08:08:45.164Z [APPConfig] [32minfo[39m: Listening on port: 18000
+2020-05-26T08:11:39.332Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T08:11:39.395Z [APPConfig] [32minfo[39m: APP configuration init in progress ....
+2020-05-26T08:11:39.396Z [APPConfig] [32minfo[39m: APP run_mode is: development APP deploy_mode is: development
+2020-05-26T08:11:39.396Z [APPConfig] [32minfo[39m: APP configuration init completed.
+2020-05-26T08:11:39.398Z [APPConfig] [32minfo[39m: Listening on port: 18000
+2020-05-26T08:13:50.841Z [APPConfig] [32minfo[39m: Running in development mode
+2020-05-26T08:13:50.878Z [APPConfig] [32minfo[39m: APP configuration init in progress ....
+2020-05-26T08:13:50.878Z [APPConfig] [32minfo[39m: APP run_mode is: development APP deploy_mode is: development
+2020-05-26T08:13:50.878Z [APPConfig] [32minfo[39m: APP configuration init completed.
+2020-05-26T08:13:50.881Z [APPConfig] [32minfo[39m: Listening on port: 18000
