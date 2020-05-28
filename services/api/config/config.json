@@ -1,6 +1,8 @@
 {
     "port": 18000,
     "app_root": "/svu/api",
+    "app_title": "SVU Application",
+    "app_version": "1.0.0",
     "app_url_domain": "localhost.com",
     "external_server_url": "https://localhost.svu.com:8443",
     "pid_file_path": "/var/run/svu_app.pid",

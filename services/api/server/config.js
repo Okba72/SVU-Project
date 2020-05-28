@@ -1,9 +1,9 @@
 /**
- * Created by aismael on 2/21/14.
+ * 
  */
 "use strict";
 
-import { AppLoggerFactory } from "./app_logger";
+import AppLoggerFactory from "./appLogger";
 
 import nconf from "nconf";
 

@@ -1,3 +1,8 @@
+/**
+ * 
+ */
+"use strict";
+
 import { Router } from 'express';
 
 const router = Router();
@@ -28,4 +33,4 @@ router.get('/:userId', (req, res, next) => {
     res.json(staff);
 });
 
-export default router;
+module.exports = router;

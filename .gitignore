@@ -10,5 +10,7 @@
 **/*.orig.*
 **/web-build/
 
+**/*.patch
+
 # macOS
 **/.DS_Store

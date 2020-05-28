@@ -1,3 +1,9 @@
+/**
+ * 
+ */
+"use strict";
+
+
 import { v4 as uuidv4 } from 'uuid';
 import { Router } from 'express';
 
@@ -35,4 +41,4 @@ router.delete('/:messageId', (req, res) => {
   return res.send(message);
 });
 
-export default router;
+module.exports = router;

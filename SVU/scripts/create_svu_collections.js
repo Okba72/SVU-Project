@@ -40,6 +40,7 @@ db.users.remove({});
  */
 var users = {
 	username: 'okba',
+	password: 'some_magic',
 	date_last_updated: new Date(),
 };
 

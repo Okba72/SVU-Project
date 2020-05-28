@@ -159,4 +159,4 @@ try {
     console.warn(">>> loger configuration file: " + logger_config_file + " not found, or corrupted!", err.message);
 }
 
-export { AppLoggerFactory }
+export default AppLoggerFactory;

@@ -20,6 +20,8 @@
     "moment": "^2.26.0",
     "mongodb": "^3.5.7",
     "nconf": "^0.10.0",
+    "swagger-jsdoc": "^4.0.0",
+    "swagger-ui-express": "^4.1.4",
     "uuid": "^8.1.0",
     "winston": "^3.2.1"
   }
