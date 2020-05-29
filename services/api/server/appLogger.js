@@ -1,5 +1,5 @@
 /**
- * Created by aismael on 11/20/13.
+ * 
  */
 
 "use strict";
@@ -8,7 +8,7 @@ import winston from "winston";
 import nconf from "nconf";
 
 import moment from "moment";
-import fs from 'fs';
+import fs from "fs";
 import path from "path";
 
 

@@ -10,6 +10,8 @@
 **/*.orig.*
 **/web-build/
 
+**/ssl/*
+
 **/*.patch
 
 # macOS

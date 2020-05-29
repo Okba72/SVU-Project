@@ -4,20 +4,47 @@
 "use strict";
 
 
-import { v4 as uuidv4 } from 'uuid';
-import { Router } from 'express';
+import { v4 as uuidv4 } from "uuid";
+import { Router } from "express";
 
 const router = Router();
+/**
+ * Setting securitySchemes in components will make all endpoints in this 
+ * modyle protected and requests will require authorization header to contain 
+ * a valid JWT token.
+ * 
+ * @swagger
+ * components:
+ *  securitySchemes:
+ *      bearerAuth:
+ *          type: http
+ *          scheme: bearer
+ *          bearerFormat: JWT 
+ *  
+ */
 
-router.get('/', (req, res) => {
+
+/**
+ * @swagger
+ * 
+ *  /:
+ *    get:
+ *          description: Returns the homepage
+ *          produces: 
+ *              - application/json
+ *          responses:
+ *              200:
+ *                  description: hello world * 
+ */
+router.get("/", (req, res) => {
   return res.send(Object.values(req.context.models.messages));
 });
 
-router.get('/:messageId', (req, res) => {
+router.get("/:messageId", (req, res) => {
   return res.send(req.context.models.messages[req.params.messageId]);
 });
 
-router.post('/', (req, res) => {
+router.post("/", (req, res) => {
   const id = uuidv4();
   const message = {
     id,
@@ -30,7 +57,7 @@ router.post('/', (req, res) => {
   return res.send(message);
 });
 
-router.delete('/:messageId', (req, res) => {
+router.delete("/:messageId", (req, res) => {
   const {
     [req.params.messageId]: message,
     ...otherMessages

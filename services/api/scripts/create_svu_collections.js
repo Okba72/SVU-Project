@@ -3,20 +3,16 @@ var db = db.getSiblingDB('svudb');
 db.users.dropIndexes();
 db.users.drop();
 
-db.user_messages.dropIndexes();
-db.user_messages.drop();
+db.messages.dropIndexes();
+db.messages.drop();
 
-db.user_files.dropIndexes();
-db.user_files.drop();
+db.files.dropIndexes();
+db.files.drop();
 
 /**********************************************************************
  *
  *
  */
-var users = {
-	date_last_updated: new Date(),
-};
-db.users.insert(users);
 
 /**
  * authorization_request expiration index:
@@ -28,8 +24,6 @@ db.users.insert(users);
 // 	{ expireAfterSeconds: 600 }
 // );
 
-db.users.remove({});
-
 /*********************************************************************
  *
  *
@@ -39,8 +33,8 @@ db.users.remove({});
  * user messages collection
  */
 var users = {
-	username: 'okba',
-	password: 'some_magic',
+	username: 'ouqbah@gmail.com',
+	password: 'SomeMagic#123',
 	date_last_updated: new Date(),
 };
 
@@ -53,24 +47,24 @@ db.users.createIndex(
 	{ unique: true }
 );
 
-var user_messages = {
-	fromUser: 'Max',
-	toUser: 'Lala',
+var messages = {
+	fromUser: 'max@some.com',
+	toUser: 'lala@some.com',
 	message: 'this is a test message',
 	date_last_updated: new Date(),
 };
 
-db.user_messages.insert(user_messages);
+db.messages.insert(messages);
 
-db.user_messages.createIndex({ fromUser: 1, toUser: 1 });
+db.messages.createIndex({ fromUser: 1, toUser: 1 });
 
-var user_files = {
-	fromUser: 'Max',
-	toUser: 'Lala',
+var files = {
+	fromUser: 'max@some.com',
+	toUser: 'lala@some.com',
 	file_path: '/files/test1.txt',
 	date_last_updated: new Date(),
 };
 
-db.user_files.insert(user_files);
+db.files.insert(files);
 
-db.user_files.createIndex({ fromUser: 1, toUser: 1, file_path: 1 });
+db.files.createIndex({ fromUser: 1, toUser: 1, file_path: 1 });

@@ -7,10 +7,67 @@ import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
 import path from "path";
-import { resolve } from 'path';
-import { readdir } from 'fs/promises';
+import fs from "fs";
+import { resolve } from "path";
+import { readdir } from "fs/promises";
+
+import { OpenApiValidator } from "express-openapi-validate";
+import passport from "passport";
+import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
+
+import get from "lodash-es/get";
 
 import HashUtils from "../lib/utils/hashUtils";
+
+
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+const refresshJWT = (req, res, next) => {
+  console.log("refreshing jwt ....");
+  next();
+}
+
+/**
+ * 
+ * @param {*} app 
+ * @param {*} appConfig 
+ */
+const mountSecurityModule = (app, appConfig) => {
+  console.log("mounting passport middleware ...");
+
+  let opts = {}
+  const secretKey = fs.readFileSync(path.resolve("./config", appConfig.get("app:ssl:key_file")));
+  opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+  // opts.jwtFromRequest = ExtractJwt.fromHeader("svuauth");
+  opts.secretOrKey = secretKey;
+  opts.issuer = "localhost";
+  opts.audience = "localhost";
+
+
+  passport.use(new JwtStrategy(opts, function (jwt_payload, done) {
+    console.log(jwt_payload);
+    return done(null, { id: jwt_payload.sub });
+
+
+    // User.findOne({ id: jwt_payload.sub }, function (err, user) {
+    //     if (err) {
+    //         return done(err, false);
+    //     }
+    //     if (user) {
+    //         return done(null, user);
+    //     } else {
+    //         return done(null, false);
+    //         // or you could create a new account
+    //     }
+    // });
+  }));
+
+}
+
 
 /**
  * 
@@ -27,7 +84,7 @@ async function getFiles(dir) {
 
 let swaggerSpec;
 
-
+let endPointHandlers = {};
 
 
 /**
@@ -57,6 +114,7 @@ const __registerModel = (app, config, modelRelPath) => {
     swaggerSpec = tempSwagSpec;
   } else {
     Object.assign(swaggerSpec.definitions, tempSwagSpec.definitions);
+    Object.assign(swaggerSpec.components, tempSwagSpec.components);
   }
 
 }
@@ -103,7 +161,12 @@ const __registerRoute = (app, config, routeRelPath, routeModule) => {
     Object.assign(swaggerSpec.paths, tempPaths);
   }
 
-  app.use(appRoot + "/" + routeRelPath, routeModule);
+  let secureModule = false;
+  if (get(tempSwagSpec, "components.securitySchemes.bearerAuth")) {
+    secureModule = true;
+  }
+
+  endPointHandlers[appRoot + "/" + routeRelPath] = { secureModule: secureModule, module: routeModule };
 }
 
 /**
@@ -112,6 +175,8 @@ const __registerRoute = (app, config, routeRelPath, routeModule) => {
  * @param {*} config 
  */
 const AppRouter = async (app, config) => {
+  mountSecurityModule(app, config);
+
   const appRoot = config.get("app_root");
 
   const modelFiles = await getFiles("./models/");
@@ -131,10 +196,30 @@ const AppRouter = async (app, config) => {
     __registerRoute(app, config, relFnNoExt, module_holder);
   }
 
+  const validator = new OpenApiValidator(swaggerSpec);
+  app.use(validator.match());
+
+  for (let [key, value] of Object.entries(endPointHandlers)) {
+    if (value.secureModule) {
+      app.use(key, passport.authenticate("jwt", { session: false }), value.module);
+    } else {
+      app.use(key, value.module);
+    }
+
+  }
   console.log(swaggerSpec);
 
   swaggerSpec.servers = [{ url: "/svu/api" }]
   app.use(appRoot + "/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+
+  // refresh JWT if a valid one is present:
+  app.use(refresshJWT);
+
+  // default route:
+  app.use((req, res) => {
+    res.sendStatus(404);
+  });
 }
 
 export default AppRouter;
