@@ -13,6 +13,7 @@
 **/ssl/*
 
 **/*.patch
+**/*.log
 
 # macOS
 **/.DS_Store
