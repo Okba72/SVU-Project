@@ -54,6 +54,7 @@ const router = Router();
 router.get("/:fileId", (req, res) => {
   let responsePayload = {
     access_token: "some token",
+    requestedFile: req.params["fileId"],
     expires_in: 3600,
     scope: "customScope",
     token_type: "Bearer"
