@@ -40,12 +40,6 @@ const router = Router();
  *          type: string
  *          minimum: 1
  *          description: A description text.
- *        - in: header
- *          name: SVUAuth
- *          type: string
- *          minimum: 1
- *          required: true
- *          description:  A Bearer JWT token
  *      responses:
  *        200:
  *          description: hello world

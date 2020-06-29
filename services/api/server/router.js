@@ -14,10 +14,10 @@ import { readdir } from "fs/promises";
 import { OpenApiValidator } from "express-openapi-validate";
 import passport from "passport";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
+import { findOne } from "./database";
+import { getConfig } from "./config";
 
 import get from "lodash-es/get";
-
-import HashUtils from "../lib/utils/hashUtils";
 
 
 /**
@@ -39,31 +39,25 @@ const refresshJWT = (req, res, next) => {
 const mountSecurityModule = (app, appConfig) => {
   console.log("mounting passport middleware ...");
 
-  let opts = {}
+  const domainUrl = new URL(appConfig.get("external_server_url"));
+
   const secretKey = fs.readFileSync(path.resolve("./config", appConfig.get("app:ssl:key_file")));
-  opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-  // opts.jwtFromRequest = ExtractJwt.fromHeader("svuauth");
-  opts.secretOrKey = secretKey;
-  opts.issuer = "localhost";
-  opts.audience = "localhost";
+  const opts = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: secretKey,
+    audience: domainUrl.hostname,
+    issuer: domainUrl.hostname,
+  };
 
+  passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
+    let existingAccount = await findOne("users", { user_id: jwt_payload.sub });
 
-  passport.use(new JwtStrategy(opts, function (jwt_payload, done) {
-    console.log(jwt_payload);
-    return done(null, { id: jwt_payload.sub });
+    if (!existingAccount || !existingAccount.active || (existingAccount.jwt_id != jwt_payload.jti)) {
+      //token is no longer valid!!
+      return done(401, null);
+    }
 
-
-    // User.findOne({ id: jwt_payload.sub }, function (err, user) {
-    //     if (err) {
-    //         return done(err, false);
-    //     }
-    //     if (user) {
-    //         return done(null, user);
-    //     } else {
-    //         return done(null, false);
-    //         // or you could create a new account
-    //     }
-    // });
+    return done(null, { userId: jwt_payload.sub });
   }));
 
 }
@@ -220,6 +214,16 @@ const AppRouter = async (app, config) => {
   app.use((req, res) => {
     res.sendStatus(404);
   });
+
+  // default error handler:
+  app.use((err, req, res, next) => {
+    // logic
+    if((err == 401) || (err == 403) || (err == 404)) {
+      return res.sendStatus(err);
+    }
+
+    res.sendStatus(400);
+  })
 }
 
 export default AppRouter;

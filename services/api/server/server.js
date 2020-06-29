@@ -7,9 +7,9 @@ import express from "express";
 import bodyParser from "body-parser";
 import nconf from "nconf";
 
+import * as configService from "./config";
 import AppRouter from "./router";
 import AppLoggerFactory from "./appLogger";
-import * as configService from "./config";
 
 import { init as dbInit } from "./database";
 

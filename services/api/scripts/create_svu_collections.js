@@ -32,39 +32,38 @@ db.files.drop();
 /**
  * user messages collection
  */
-var users = {
-	username: 'ouqbah@gmail.com',
-	password: 'SomeMagic#123',
-	date_last_updated: new Date(),
-};
-
-db.users.insert(users);
+// var users = {
+// 	user_id: 'ouqbah@gmail.com',
+// 	password: 'string12345566668888',
+// 	active: false,
+// 	jwt_id: '',
+// 	date_last_updated: new Date(),
+// };
+// db.users.insert(users);
 
 db.users.createIndex(
 	{
-		username: 1,
+		user_id: 1,
 	},
 	{ unique: true }
 );
 
-var messages = {
-	fromUser: 'max@some.com',
-	toUser: 'lala@some.com',
-	message: 'this is a test message',
-	date_last_updated: new Date(),
-};
-
-db.messages.insert(messages);
+// var messages = {
+// 	fromUser: 'max@some.com',
+// 	toUser: 'lala@some.com',
+// 	message: 'this is a test message',
+// 	date_last_updated: new Date(),
+// };
+// db.messages.insert(messages);
 
 db.messages.createIndex({ fromUser: 1, toUser: 1 });
 
-var files = {
-	fromUser: 'max@some.com',
-	toUser: 'lala@some.com',
-	file_path: '/files/test1.txt',
-	date_last_updated: new Date(),
-};
-
-db.files.insert(files);
+// var files = {
+// 	fromUser: 'max@some.com',
+// 	toUser: 'lala@some.com',
+// 	file_path: '/files/test1.txt',
+// 	date_last_updated: new Date(),
+// };
+// db.files.insert(files);
 
 db.files.createIndex({ fromUser: 1, toUser: 1, file_path: 1 });
