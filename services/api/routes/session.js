@@ -87,9 +87,11 @@ router.post("/login", async (req, res) => {
         await updateOne("users", { user_id: userId }, { $set: { jwt_id: jwtId } });
     }
 
+    let expireTimeMillis = (new Date()).getTime() + 3600000;
     let responsePayload = {
         scope: "SVU",
-        token_type: "JWT"
+        token_type: "JWT",
+        expireTimeMillis: expireTimeMillis,
     };
 
     const secretKey = fs.readFileSync(path.resolve("./config", appConfig.get("app:ssl:key_file")));
@@ -171,7 +173,7 @@ router.post("/logoutAllDevices", async (req, res) => {
  * @swagger
  *  /getNARToken/{userId}:
  *    get:
- *      description: Returns the requested file
+ *      description: Returns a not-a-robot image and token
  *      produces: 
  *        - application/json
  *      security:
@@ -282,10 +284,6 @@ router.post("/signup", async (req, res) => {
     }
     await insertOne("users", newAcount);
 
-    // TODO:
-    // 1- return an expired cookie
-    // 2- redirect to login
-    // res.json("hellllllooooo");
     res.redirect(loginUrl);
 })
 
