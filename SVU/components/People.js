@@ -1,91 +1,29 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
 import { ActivityIndicator, Alert, Modal, Button, TextInput, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
 
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { FontAwesome } from '@expo/vector-icons';
-
-import { MonoText } from '../components/StyledText';
-// import { UserInterfaceIdiom } from 'expo-constants';
-
 import { SVUSessionContext } from '../hooks/useSVUSessionContext';
 
 
 
-export default function LoginScreen() {
+export function People() {
   const { svuSession, APIActivityInProgress, doLogin } = React.useContext(SVUSessionContext);
   const [userId, setUserId] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-
   console.log(`svuSession.apiActivityInProgress: ${svuSession.apiActivityInProgress}`)
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={require('../assets/images/svu_logo.png')}
-            style={styles.welcomeImage}
-          />
-        </View>
 
-        {/* <View style={styles.welcomeContainer}>
-          <FontAwesome.Button name="lock" backgroundColor="#3b5998" onPress={() => { }}>
-            Login with Facebook
-        </FontAwesome.Button>
-        </View> */}
-
-
-        <View style={[styles.getStartedContainer, {
-          borderBottomColor: 'black',
-          borderBottomWidth: StyleSheet.hairlineWidth,
-          paddingBottom: 50,
-          marginBottom: 20,
-        }]}>
-
-          <Text style={styles.getStartedText}>This is the login screen for the SVU project.</Text>
-        </View>
-
-        <View style={styles.leftDecoratedContainer}>
-          <MaterialIcons name="email" size={24} color="black" />
-          <TextInput
-            value={userId}
-            // leftIcon={{ type: 'font-awesome', name: 'lock' }}
-            onChangeText={(username) => { setUserId(username) }}
-            placeholder={'Username'}
-            style={styles.input}
-          />
-        </View>
-        <View style={styles.leftDecoratedContainer}>
-          <MaterialCommunityIcons name="textbox-password" size={24} color="black" />
-          <TextInput
-            value={password}
-            onChangeText={(password) => { setPassword(password) }}
-            placeholder={'Password'}
-            secureTextEntry={true}
-            style={styles.input}
-          />
-        </View>
-        <View style={styles.leftDecoratedContainer}>
-          <Button
-            title={'Login'}
-            style={styles.input}
-            onPress={() => { doLogin(userId, password) }}
-          />
-        </View>
-
-      </ScrollView>
-
-      <APIActivityInProgress />
     </View>
   );
 }
 
-LoginScreen.navigationOptions = {
+LoginForm.navigationOptions = {
   header: null,
 };
 

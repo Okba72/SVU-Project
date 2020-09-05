@@ -145,6 +145,10 @@ router.post("/logoutAllDevices", async (req, res) => {
     let userId = req.body["userId"];
     let password = req.body["password"];
 
+    let responsePayload = {
+        success: true,
+        message: "All sessions on all devices have been logged out.",
+    }
 
     if (!CryptoHelper.validateEmail(userId)) {
         return res.status(400).send("Invalid user ID");
@@ -161,7 +165,7 @@ router.post("/logoutAllDevices", async (req, res) => {
 
     await updateOne("users", { user_id: userId }, { $set: { jwt_id: "" } });
 
-    res.redirect(loginUrl);
+    return res.json(responsePayload);
 })
 
 
@@ -247,8 +251,8 @@ router.get("/getNARToken/:userId", async (req, res) => {
  *                              - narToken
  *                              - narText
  *          responses:  
- *              301:
- *                  description: signup successful, response is redirection to login 
+ *              200:
+ *                  description: signup successful, response includes message to redirect to login 
  */
 router.post("/signup", async (req, res) => {
     let loginUrl = getConfig().get("login_url");
@@ -270,9 +274,14 @@ router.post("/signup", async (req, res) => {
         return res.status(403).send("Robots are forbidden");
     }
 
+    let responsePayload = {
+        success: true,
+        message: `Signup successfule, should be redirected to login.`,
+    }
+
     let existingAccount = await findOne("users", { user_id: userId });
     if (existingAccount) {
-        return res.redirect(loginUrl);
+        return res.json(responsePayload);
     }
 
     // at this point, everything is ok to create the account and activate it:
@@ -284,7 +293,7 @@ router.post("/signup", async (req, res) => {
     }
     await insertOne("users", newAcount);
 
-    res.redirect(loginUrl);
+    return res.json(responsePayload);
 })
 
 /**
@@ -348,7 +357,12 @@ router.post("/changePassword", async (req, res) => {
             }
         });
 
-    res.redirect(loginUrl);
+    let responsePayload = {
+        success: true,
+        message: `changePassword successfule, should be redirected to login.`,
+    }
+
+    return res.json(responsePayload);
 })
 
 

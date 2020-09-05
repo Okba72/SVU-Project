@@ -6,7 +6,7 @@
     "app_url_domain": "localhost",
     "external_server_url": "https://localhost:8443",
     "pid_file_path": "/var/run/svu_app.pid",
-    "login_url": "https://localhost:19006/SVU/login",
+    "login_url": "https://localhost:19006/",
     "app": {
         "ssl": {
             "cert_file": "./ssl/cert.pem",
@@ -14,7 +14,8 @@
         },
         "security": {
             "jwt_header_name": "",
-            "session_duration": 3600
+            "session_duration": 3600,
+            "allow_origin": "https://localhost:19006"
         },
         "third_party_oauth": {},
         "database": {

@@ -1,26 +1,31 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button, } from 'react-native';
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { MonoText } from '../components/StyledText';
 
 export default function HomeScreen() {
-
-  //state
-
-
   return (
     <View style={styles.container}>
-      <View style={styles.welcomeContainer}>
-        <Image
-          source={require('../assets/images/svu_logo.png')}
-          style={styles.welcomeImage}
-        />
-      </View>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+        <View style={styles.welcomeContainer}>
+          <Image
+            source={require('../assets/images/svu_logo.png')}
+            style={styles.welcomeImage}
+          />
 
-        {/* <View style={[styles.getStartedContainer, {
+          {/* <Image
+            source={
+              __DEV__
+                ? require('../assets/images/robot-dev.png')
+                : require('../assets/images/robot-prod.png')
+            }
+            style={styles.welcomeImage}
+          /> */}
+        </View>
+
+        <View style={[styles.getStartedContainer, {
           borderBottomColor: 'black',
           borderBottomWidth: StyleSheet.hairlineWidth,
           paddingBottom: 50,
@@ -48,26 +53,16 @@ export default function HomeScreen() {
           <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
             <Text style={styles.helpLinkText}>Help references for creating a new expo app.</Text>
           </TouchableOpacity>
-        </View> */}
-
-
+        </View>
       </ScrollView>
 
       <View style={styles.tabBarInfoContainer}>
-        <Button
-          title={'People'}
-          buttonStyle={styles.input}
-          onPress={() => { }}
-        />
+        <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
 
-        <Button
-          title={'New Chat'}
-          style={styles.input}
-          onPress={() => { }}
-        />
+        <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
+          <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator.js</MonoText>
+        </View>
       </View>
-
-
     </View>
   );
 }
@@ -157,12 +152,8 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: 'center',
   },
-
   tabBarInfoContainer: {
-    flex: 1,
-    flexDirection: 'row',
     position: 'absolute',
-    // width: "80%",
     bottom: 0,
     left: 0,
     right: 0,
@@ -177,29 +168,10 @@ const styles = StyleSheet.create({
         elevation: 20,
       },
     }),
-    margin: "0 auto",
-    textAlign: 'center',
     alignItems: 'center',
-    justifyContent: 'space-around',
     backgroundColor: '#fbfbfb',
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingVertical: 20,
   },
-  input: {
-    flex: 1,
-    width: 48,
-    height: 32,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderRadius: 12,
-    borderColor: 'grey',
-    marginBottom: 10,
-    margin: "0 auto",
-    textAlign: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
   tabBarInfoText: {
     fontSize: 17,
     color: 'rgba(96,100,109, 1)',
@@ -219,5 +191,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2e78b7',
   },
-
 });
