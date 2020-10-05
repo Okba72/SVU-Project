@@ -6,6 +6,9 @@ db.users.drop();
 db.messages.dropIndexes();
 db.messages.drop();
 
+db.conversations.dropIndexes();
+db.conversations.drop();
+
 db.files.dropIndexes();
 db.files.drop();
 
@@ -56,7 +59,8 @@ db.users.createIndex(
 // };
 // db.messages.insert(messages);
 
-db.messages.createIndex({ fromUser: 1, toUser: 1 });
+db.conversations.createIndex({ user_list: 1, date_last_updated: -1 });
+
 
 // var files = {
 // 	fromUser: 'max@some.com',

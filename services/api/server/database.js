@@ -16,7 +16,7 @@ let array_fetch_limit = 1000;
 let logger;
 
 const connect_config = {
-    promiseLibrary: Promise,
+    // promiseLibrary: Promise,
     w: 1,
     wtimeout: 10000,
     j: true,

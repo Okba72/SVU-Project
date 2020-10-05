@@ -22,7 +22,7 @@
     "jsonwebtoken": "^8.5.1",
     "lodash-es": "^4.17.15",
     "moment": "^2.26.0",
-    "mongodb": "^3.5.7",
+    "mongodb": "^3.6.2",
     "nconf": "^0.10.0",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",

@@ -2,13 +2,16 @@ import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
 import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button, } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import { AntDesign } from '@expo/vector-icons';
 import { MonoText } from '../components/StyledText';
+
+import {Conversations} from '../components/Conversations';
 
 export default function HomeScreen() {
 
   //state
 
+  const convListings = (<Conversations />)
 
   return (
     <View style={styles.container}>
@@ -18,56 +21,7 @@ export default function HomeScreen() {
           style={styles.welcomeImage}
         />
       </View>
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-
-        {/* <View style={[styles.getStartedContainer, {
-          borderBottomColor: 'black',
-          borderBottomWidth: StyleSheet.hairlineWidth,
-          paddingBottom: 50,
-          marginBottom: 20,
-        }]}>
-          <DevelopmentModeNotice />
-
-          <Text style={styles.getStartedText}>This is the home screen for the SVU project.</Text>
-        </View>
-
-
-        <View style={styles.getStartedContainer}>
-          <Text style={styles.getStartedText}>Open up the code for this screen:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
-
-          <Text style={styles.getStartedText}>
-            Change any of the text, save the file, and your app will automatically reload.
-          </Text>
-        </View>
-
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>Help references for creating a new expo app.</Text>
-          </TouchableOpacity>
-        </View> */}
-
-
-      </ScrollView>
-
-      <View style={styles.tabBarInfoContainer}>
-        <Button
-          title={'People'}
-          buttonStyle={styles.input}
-          onPress={() => { }}
-        />
-
-        <Button
-          title={'New Chat'}
-          style={styles.input}
-          onPress={() => { }}
-        />
-      </View>
-
-
+      {convListings}
     </View>
   );
 }
@@ -178,7 +132,6 @@ const styles = StyleSheet.create({
       },
     }),
     margin: "0 auto",
-    textAlign: 'center',
     alignItems: 'center',
     justifyContent: 'space-around',
     backgroundColor: '#fbfbfb',
