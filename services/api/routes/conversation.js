@@ -7,13 +7,13 @@
 import { v4 as uuidv4 } from "uuid";
 import { Router } from "express";
 import { find, findOne, insertOne, updateOne } from "../server/database";
-
+import { sendMessage } from "../lib/utils/ws_backend_client";
 
 const router = Router();
 
 /**
  * Setting securitySchemes in components will make all endpoints in this 
- * modyle protected and requests will require authorization header to contain 
+ * module protected and requests will require authorization header to contain 
  * a valid JWT token.
  * 
  * @swagger
@@ -51,7 +51,7 @@ const router = Router();
 router.get("/myConversations/:beforeTimeMillis", async (req, res) => {
 
   let timeBefore;
-  if (req.params["beforeTimeMillis"]) {
+  if (req.params["beforeTimeMillis"] && (parseInt(req.params["beforeTimeMillis"]) > 0)) {
     timeBefore = new Date(parseInt(req.params["beforeTimeMillis"]));
   } else {
     timeBefore = new Date();
@@ -62,7 +62,7 @@ router.get("/myConversations/:beforeTimeMillis", async (req, res) => {
       date_last_updated: { $lt: timeBefore },
       user_list: req.user.userId
     },
-    { limit: 30, sort: [["date_last_update", -1]], projection: { _id: 0, title_text: 1, user_list: 1 } });
+    { limit: 100, sort: [["date_last_update", -1]], projection: { _id: 0, title_text: 1, user_list: 1 } });
 
   let tempObj = {
     conversations: convs
@@ -110,22 +110,66 @@ router.post("/create", async (req, res) => {
   console.log(`new conversation for: ${userList.join(",")} created.`);
 
 
-  let insOp = await updateOne("conversations", { date_last_updated: null }, { $set: { user_list: userList, title_text: titleText } }, { upsert: true, })
+  let insOp = await updateOne("conversations", { date_last_updated: null }, { $set: { user_list: userList, title_text: titleText, unread: true } }, { upsert: true, })
 
 
   if (insOp.result.ok = 1) {
     const conversation = {
       conversationId: insOp.upsertedId._id,
       userList,
-
+      titleText,
     };
+
+    const wsMessage = {
+      endPoint: "conversation",
+      conversation: conversation,
+    }
+
+    try {
+      // TODO: get the wss url from redis
+      console.log(wsMessage);
+      await sendMessage("ali@gaaiat.com", "wss://localhost:18001", wsMessage);
+    } catch (err) {
+      console.log(err);
+    }
+
     return res.json(conversation);
   } else {
     return res.status(400);
   }
 });
 
-router.delete("/:conversatioinId", (req, res) => {
+
+/**
+ * @swagger
+ *  /delete:
+ *      post:
+ *          description: Creates a new conversation
+ *          produces: 
+ *              - application/json
+ *          security:
+ *              - bearerAuth: []
+ *          requestBody:
+ *              description: an array of conversation IDs to delete.
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              conversation_ids: 
+ *                                  type: array
+ *                                  items: 
+ *                                      type: string
+ *                          required:
+ *                              - conversation_ids
+ *          responses:  
+ *              200:
+ *                  description: new conversation created
+ */
+router.delete("/delete/:conversatioinId", (req, res) => {
+
+
   const {
     [req.params.conversationId]: conversation,
     ...otherConversations

@@ -51,6 +51,9 @@ db.users.createIndex(
 	{ unique: true }
 );
 
+
+db.conversations.createIndex({ user_list: 1, date_last_updated: -1 });
+
 // var messages = {
 // 	fromUser: 'max@some.com',
 // 	toUser: 'lala@some.com',
@@ -58,8 +61,7 @@ db.users.createIndex(
 // 	date_last_updated: new Date(),
 // };
 // db.messages.insert(messages);
-
-db.conversations.createIndex({ user_list: 1, date_last_updated: -1 });
+db.messages.createIndex({ conversation_id: 1, date_last_updated: -1 });
 
 
 // var files = {

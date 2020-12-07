@@ -5,13 +5,14 @@
 ```bash
  sudo npm install expo-cli --global 
 ```
-- install [redis](http://redis.io)
+- install [redis](http://redis.io) [redis on mac](https://medium.com/@petehouston/install-and-config-redis-on-mac-os-x-via-homebrew-eb8df9a4f298)
 - install [mongodb](http://mongodb.com/download-center/community)
 
 ## Dependencies Documentation
 | Dependency | Links |
 | ----------- | ----------- |
 | redis | [Documentation list](https://redis.io/documentation) |
+| redis client | [NodeJs client](https://www.npmjs.com/package/redis) |
 | mongodb driver | [Quick start](https://mongodb.github.io/node-mongodb-native/3.5/quick-start/quick-start/) |
 
 

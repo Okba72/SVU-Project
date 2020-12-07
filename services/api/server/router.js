@@ -17,7 +17,7 @@ import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { findOne } from "./database";
 import { getConfig } from "./config";
 
-import get from "lodash-es/get";
+import get from "lodash/get";
 
 
 /**

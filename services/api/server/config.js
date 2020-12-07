@@ -3,7 +3,7 @@
  */
 "use strict";
 
-import AppLoggerFactory from "./appLogger";
+import AppLoggerFactory from "./app_logger";
 
 import nconf from "nconf";
 

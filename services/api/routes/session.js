@@ -15,7 +15,7 @@ import CryptoHelper from "../lib/utils/cryptoHelper";
 
 import ImageHelper from "../lib/utils/imageHelper";
 
-import AppLoggerFactory from "../server/appLogger";
+import AppLoggerFactory from "../server/app_logger";
 import { findOne, insertOne, updateOne } from "../server/database";
 
 const router = Router();

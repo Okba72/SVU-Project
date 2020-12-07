@@ -3,8 +3,8 @@
  */
 "use strict";
 import mongo from "mongodb";
-import get from "lodash-es/get";
-import set from "lodash-es/set";
+import get from "lodash/get";
+import set from "lodash/set";
 
 const mongo_client = mongo.MongoClient;
 

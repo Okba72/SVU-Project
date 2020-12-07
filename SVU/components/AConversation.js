@@ -13,12 +13,16 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SVUSessionContext } from '../hooks/useSVUSessionContext';
 
 export function AConversationSummary(props) {
-  const { conversationId, recipients, titleText } = props;
+  const { conversationId, recipients, titleText, unread } = props;
 
+  let recipStyle = styles.recipientsText;
+  if (unread) {
+    recipStyle = styles.recipientsTextUnread;
+  }
   return (
     <View style={styles.aConversationSummaryContainer}>
-      <Text style={styles.recipientsText}
-        onPress={() => alert(`First chat pressed! ${conversationId}` )}
+      <Text style={recipStyle}
+        onPress={() => alert(`First chat pressed! ${conversationId}`)}
       >{recipients}</Text>
       <Text style={styles.titleText}>{titleText}</Text>
     </View>
@@ -118,6 +122,15 @@ const styles = StyleSheet.create({
     lineHeight: 16,
     textAlign: 'left',
   },
+
+  recipientsTextUnread: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: 'rgba(196,100,109, 1)',
+    lineHeight: 16,
+    textAlign: 'left',
+  },
+
 
   titleText: {
     fontSize: 12,

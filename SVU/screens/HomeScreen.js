@@ -1,17 +1,17 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button, } from 'react-native';
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Button, SafeAreaView } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
 import { MonoText } from '../components/StyledText';
 
-import {Conversations} from '../components/Conversations';
+import { ConversationList } from '../components/ConversationList';
 
 export default function HomeScreen() {
 
   //state
 
-  const convListings = (<Conversations />)
+  const convListings = (<ConversationList />)
 
   return (
     <View style={styles.container}>
@@ -67,6 +67,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+    paddingLeft: 20,
+    paddingRight: 20,
   },
   developmentModeText: {
     marginBottom: 20,

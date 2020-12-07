@@ -1,12 +1,23 @@
 {
     "port": 18000,
+    "ws_port": 18001,
     "app_root": "/svu/api",
     "app_title": "SVU Application",
     "app_version": "1.0.0",
     "app_url_domain": "localhost",
-    "external_server_url": "https://localhost:8443",
+    "external_server_url": "https://localhost:18000",
     "pid_file_path": "/var/run/svu_app.pid",
     "login_url": "https://localhost:19006/",
+    "wss_server": {
+        "ssl": {
+            "cert_file": "config/ssl/cert.pem",
+            "key_file": "config/ssl/key.pem"
+        },
+        "wss_port": 18001,
+        "protocols": ["svu-protocol"],
+        "wss_handlers_root": "wss_handlers",
+        "allow_origins": ["https://localhost:19006", "https://localhost:18000"]
+    },
     "app": {
         "ssl": {
             "cert_file": "./ssl/cert.pem",

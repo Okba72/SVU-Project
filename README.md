@@ -6,7 +6,7 @@ Designing & Implementing a Web-based Multi-service cross-platform secure network
 
 ## Plan
 
-1- Using consepts of SPA & PWA.
+1- Using concepts of SPA & PWA.
 2- Using React (JavScript platform) for front-end App
 3- Using Express (Node.js platform) for back-end
 4- Using MongoDB as Database

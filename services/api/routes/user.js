@@ -9,7 +9,7 @@ const router = Router();
 
 /**
  * Setting securitySchemes in components will make all endpoints in this 
- * modyle protected and requests will require authorization header to contain 
+ * module protected and requests will require authorization header to contain 
  * a valid JWT token.
  * 
  * @swagger

@@ -1,10 +1,10 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { ActivityIndicator, Alert, Modal, Button, TextInput, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Modal, Button, TextInput, Image, Platform, StyleSheet, Text, TouchableOpacity, View, ScrollView, SafeAreaView } from 'react-native';
 
-import { ScrollView } from 'react-native-gesture-handler';
+// import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
-import { MonoText } from '../components/StyledText';
+import { MonoText } from './StyledText';
 
 
 import { MaterialIcons } from '@expo/vector-icons';
@@ -15,7 +15,7 @@ import { SVUSessionContext } from '../hooks/useSVUSessionContext';
 import { AConversationSummary } from './AConversation';
 
 
-export function Conversations() {
+export function ConversationList() {
   const { svuSession, APIActivityInProgress, doLogin } = React.useContext(SVUSessionContext);
   const [userId, setUserId] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -23,20 +23,41 @@ export function Conversations() {
   const demoRecipients = ["ali", "ali, ouqbah", "assem", "ali, ouqbah, assem"];
   const demoTitleText = ["First conversation", "First conversation", "First conversation", "First conversation"];
 
-  let i=1;
-  const convs = demoRecipients.map((aRecip) => {
-    return (<AConversationSummary conversationId={i++} recipients={aRecip} titleText="First conversation" />)
+  // console.log("svuSession", svuSession);
+
+  const convArr = Object.values(svuSession.conversations).sort((a, b) => {
+    // console.log(a.date_last_updated , b.date_last_updated);
+    let aDt = Date.parse(a.date_last_updated);
+    let bDt = Date.parse(b.date_last_updated);
+    if (aDt > bDt) {
+      return -1;
+    } else if (aDt < bDt) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+  // console.log("convArr", convArr);
+
+  const convs = convArr.map((aRecip) => {
+    return (<AConversationSummary
+      conversationId={aRecip._id}
+      recipients={aRecip.user_list.join(", ")}
+      titleText={aRecip.title_text || ""}
+      unread={aRecip.unread || false}
+      key={aRecip._id}
+    />)
   });
 
   return (
     <View style={styles.container}>
 
-      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <ScrollView style={styles.container} >
 
 
-        {convs}
+          {convs}
 
-        {/* <View style={[styles.getStartedContainer, {
+          {/* <View style={[styles.getStartedContainer, {
           borderBottomColor: 'black',
           borderBottomWidth: StyleSheet.hairlineWidth,
           paddingBottom: 50,
@@ -77,7 +98,7 @@ export function Conversations() {
         /> */}
 
         <TouchableOpacity
-          onPress={() => alert('Hello, world!')}
+          onPress={() => alert('Hello, world 1,2,3 !')}
           style={{}}>
           <Text style={styles.touchableButttons}>
             <AntDesign name="pluscircle" size={24} color="rgb(33, 150, 243)" />
@@ -105,9 +126,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   contentContainer: {
+    flex: 1,
     paddingTop: 30,
   },
   welcomeContainer: {
+    flex: 1,
     alignItems: 'center',
     marginTop: 10,
     marginBottom: 20,
