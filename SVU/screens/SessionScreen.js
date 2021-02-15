@@ -1,6 +1,6 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { ActivityIndicator, Alert, Modal, Button, TextInput, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Modal, Button, TextInput, Image, Platform, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 
@@ -28,7 +28,7 @@ export default function SessionScreen() {
   let alternateFormText = 'If you don\'t have an account, please feel free to signup';
   let alternateFormButtonText = 'Signup For A New Account';
 
-  if(signupInProgress) {
+  if (signupInProgress) {
     sessionForm = sessionForm = (<SignupForm setSignupInProgress={setSignupInProgress} />);
     alternateFormText = 'If you already have an account, please login'
     alternateFormButtonText = 'Login';
@@ -44,12 +44,6 @@ export default function SessionScreen() {
           />
         </View>
 
-        {/* <View style={styles.welcomeContainer}>
-          <FontAwesome.Button name="lock" backgroundColor="#3b5998" onPress={() => { }}>
-            Login with Facebook
-        </FontAwesome.Button>
-        </View> */}
-
         {sessionForm}
 
         <View style={[styles.getStartedContainer, {
@@ -60,15 +54,18 @@ export default function SessionScreen() {
           marginBottom: 20,
         }]}>
 
-      <Text style={styles.getStartedText}>{alternateFormText}</Text>
+          <Text style={styles.getStartedText}>{alternateFormText}</Text>
         </View>
 
         <View style={styles.leftDecoratedContainer}>
-          <Button
-            title={alternateFormButtonText}
-            style={styles.input}
+          <TouchableHighlight
+            style={styles.loginButton}
             onPress={() => { setSignupInProgress(!signupInProgress) }}
-          />
+
+            underlayColor='rgb(128, 180, 220)'>
+            <Text style={styles.loginText}>{alternateFormButtonText}</Text>
+          </TouchableHighlight>
+
         </View>
 
       </ScrollView>
@@ -105,6 +102,26 @@ const styles = StyleSheet.create({
     // margin: "auto",
     backgroundColor: '#ecf0f1',
   },
+
+  loginButton: {
+    width: 240,
+    height: 42,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    marginBottom: 10,
+    backgroundColor: 'rgb(33, 150, 243)',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#fff'
+  },
+  loginText: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+
 
   input: {
     width: 200,

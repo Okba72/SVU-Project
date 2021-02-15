@@ -15,6 +15,8 @@ import { SVUSessionContext } from '../hooks/useSVUSessionContext';
 export function AConversationSummary(props) {
   const { conversationId, recipients, titleText, unread } = props;
 
+  const { setActiveConversationId } = React.useContext(SVUSessionContext);
+
   let recipStyle = styles.recipientsText;
   if (unread) {
     recipStyle = styles.recipientsTextUnread;
@@ -22,7 +24,7 @@ export function AConversationSummary(props) {
   return (
     <View style={styles.aConversationSummaryContainer}>
       <Text style={recipStyle}
-        onPress={() => alert(`First chat pressed! ${conversationId}`)}
+        onPress={() => { setActiveConversationId(conversationId) }}
       >{recipients}</Text>
       <Text style={styles.titleText}>{titleText}</Text>
     </View>
@@ -40,37 +42,6 @@ export function AConversation() {
     <View style={styles.container}>
 
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-
-        {/* <View style={[styles.getStartedContainer, {
-          borderBottomColor: 'black',
-          borderBottomWidth: StyleSheet.hairlineWidth,
-          paddingBottom: 50,
-          marginBottom: 20,
-        }]}>
-          <DevelopmentModeNotice />
-
-          <Text style={styles.getStartedText}>This is the home screen for the SVU project.</Text>
-        </View>
-
-
-        <View style={styles.getStartedContainer}>
-          <Text style={styles.getStartedText}>Open up the code for this screen:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
-
-          <Text style={styles.getStartedText}>
-            Change any of the text, save the file, and your app will automatically reload.
-          </Text>
-        </View>
-
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>Help references for creating a new expo app.</Text>
-          </TouchableOpacity>
-        </View> */}
-
 
       </ScrollView>
 

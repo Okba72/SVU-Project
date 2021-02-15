@@ -56,6 +56,7 @@ export const SVUSessionProvider = props => {
     apiError: "",
     wsClient: null,
     conversations: {},
+    activeConversationId: null,
   };
 
 
@@ -68,9 +69,14 @@ export const SVUSessionProvider = props => {
     // console.log("sesionReducer - 1: ", state, action.newState);
     let newState = {};
     switch (action.type) {
+      case "API_ERR_RESET":
+        // console.log("sesionReducer - 1: ", action.newState);
+        newState = Object.assign(newState, state);
+        newState.apiError = "";
+        return newState;
+
       case "API_CALL":
         newState = Object.assign(newState, state, action.newState);
-
         // console.log("sesionReducer - 2: ", newState);
         return newState;
 
@@ -85,6 +91,12 @@ export const SVUSessionProvider = props => {
         newState.conversations = Object.assign({}, newState.conversations, action.newState.conversations);
         return newState;
 
+      case "ACTIVE_CONV":
+        // console.log("sesionReducer - 5: ", action.newState);
+        newState = Object.assign(newState, state);
+        newState.activeConversationId = Object.assign({}, newState.activeConversationId, action.newState.activeConversationId);
+        return newState;
+
       default:
         return state;
     }
@@ -95,6 +107,21 @@ export const SVUSessionProvider = props => {
 
   const doLogout = (logoutAllDevices = false) => {
   }
+
+
+
+  const setActiveConversationId = (actConvId) => {
+    let sessionUpdateAction = {
+      type: "ACTIVE_CONV",
+      newState: {
+        activeConversationId: actConvId,
+      }
+    };
+    console.log(actConvId);
+
+    dispatchSessionUpdate(sessionUpdateAction);
+  };
+
 
   /**
    * 
@@ -116,10 +143,12 @@ export const SVUSessionProvider = props => {
       let sessionUpdateAction = {
         type: "API_CALL",
         newState: {
+          userId: userId,
+          expireTimeMillis: loginResponse.expireTimeMillis,
         }
       }
 
-      sessionUpdateAction.newState.expireTimeMillis = loginResponse.expireTimeMillis;
+      dispatchSessionUpdate(sessionUpdateAction);
 
       playSound();
 
@@ -159,8 +188,6 @@ export const SVUSessionProvider = props => {
         // console.log(`\n\n\n userLoggedIn changed, useEffect: will load conversations... \n\n\n`);
 
         fetchNewConversations();
-
-        // initWSClient(svuSession, dispatchSessionUpdate);
       }
       return;
     }, [svuSession.userLoggedIn]
@@ -352,9 +379,10 @@ export const SVUSessionProvider = props => {
   const APIError = () => {
 
     let sessionUpdateAction = {
-      type: "API_CALL",
-      newState: {},
-    }
+      type: "API_ERR_RESET",
+      newState: {
+      }
+    };
 
     if (svuSession.apiError) {
       return (
@@ -438,7 +466,7 @@ export const SVUSessionProvider = props => {
 
 
   // pass the init context value in provider and return
-  return (<SVUSessionContext.Provider value={{ svuSession, APIActivityInProgress, APIError, doLogin, doLogout, apiCall }}>{children}</SVUSessionContext.Provider>);
+  return (<SVUSessionContext.Provider value={{ svuSession, setActiveConversationId, APIActivityInProgress, APIError, doLogin, doLogout, apiCall }}>{children}</SVUSessionContext.Provider>);
 };
 
 

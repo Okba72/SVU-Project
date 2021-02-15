@@ -1,7 +1,5 @@
-import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { ActivityIndicator, Alert, Modal, Button, TextInput, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ActivityIndicator, Alert, Modal, Button, TextInput, Image, Platform, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 
 
 import { MaterialIcons } from '@expo/vector-icons';
@@ -10,14 +8,13 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 import { MonoText } from '../components/StyledText';
-// import { UserInterfaceIdiom } from 'expo-constants';
 
 import { SVUSessionContext } from '../hooks/useSVUSessionContext';
 
 
 
 export function SignupForm(props) {
-  const {setSignupInProgress} = props;
+  const { setSignupInProgress } = props;
   const { svuSession, APIActivityInProgress, doLogin, apiCall } = React.useContext(SVUSessionContext);
   const [userId, setUserId] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -92,7 +89,7 @@ export function SignupForm(props) {
 
     let response = await apiCall(`/session/signup`, payload);
 
-    if(response.success) {
+    if (response.success) {
       setSignupInProgress(false);
     }
     console.log(response);
@@ -116,14 +113,18 @@ export function SignupForm(props) {
 
           <View style={[styles.leftDecoratedContainer,]}>
             {/* <MaterialCommunityIcons name="robot" size={24} color="red" /> */}
-            <FontAwesome5 name="robot" size={20} color="red" />
-            <TextInput
-              value={narText}
-              onChangeText={(narText) => { setNarText(narText) }}
-              placeholder={'Enter the text you see on the image:'}
-              secureTextEntry={false}
-              style={[styles.input,]}
-            />
+            <View style={{ flex: 0.2, }}>
+              <FontAwesome5 name="robot" size={20} color="red" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <TextInput
+                value={narText}
+                onChangeText={(narText) => { setNarText(narText) }}
+                placeholder={'Enter the text you see on the image:'}
+                secureTextEntry={false}
+                style={[styles.input,]}
+              />
+            </View>
           </View>
 
         </View>
@@ -136,46 +137,62 @@ export function SignupForm(props) {
   return (
     <View style={styles.container}>
       <View style={styles.leftDecoratedContainer}>
-        <MaterialIcons name="email" size={24} color="black" />
-        <TextInput
-          value={userId}
-          // leftIcon={{ type: 'font-awesome', name: 'lock' }}
-          onChangeText={(username) => { updateUserid(username); }}
-          placeholder={'Username'}
-          style={styles.input}
-        />
+        <View style={{ flex: 0.2, }}>
+          <MaterialIcons name="email" size={24} color="black" />
+        </View>
+        <View style={{ flex: 1 }}>
+          <TextInput
+            value={userId}
+            // leftIcon={{ type: 'font-awesome', name: 'lock' }}
+            onChangeText={(username) => { updateUserid(username); }}
+            placeholder={'Username'}
+            style={styles.input}
+          />
+        </View>
       </View>
+
+
       <View style={[styles.leftDecoratedContainer,]}>
-        <MaterialCommunityIcons name="textbox-password" size={24} color="black" />
-        <TextInput
-          value={password}
-          onChangeText={(newPassword) => { updatePassword(newPassword); }}
-          placeholder={'Password, at least 12 characters'}
-          secureTextEntry={true}
-          style={[styles.input, pwValidStyle(),]}
-        />
+        <View style={{ flex: 0.17, }}>
+          <MaterialCommunityIcons name="textbox-password" size={24} color="black" />
+        </View>
+        <View style={{ flex: 1 }}>
+          <TextInput
+            value={password}
+            onChangeText={(newPassword) => { updatePassword(newPassword); }}
+            placeholder={'Password, at least 12 characters'}
+            secureTextEntry={true}
+            style={[styles.input, pwValidStyle(),]}
+          />
+        </View>
       </View>
 
       <View style={styles.leftDecoratedContainer}>
-        <MaterialCommunityIcons name="textbox-password" size={24} color="black" />
-        <TextInput
-          value={confirmPassword}
-          onChangeText={(newConfirmPassword) => { updateConfirmPassword(newConfirmPassword); }}
-          placeholder={'Confirm Password'}
-          secureTextEntry={true}
-          style={[styles.input, confPwValidStyle(),]}
-        />
+        <View style={{ flex: 0.17, }}>
+          <MaterialCommunityIcons name="textbox-password" size={24} color="black" />
+        </View>
+        <View style={{ flex: 1 }}>
+          <TextInput
+            value={confirmPassword}
+            onChangeText={(newConfirmPassword) => { updateConfirmPassword(newConfirmPassword); }}
+            placeholder={'Confirm Password'}
+            secureTextEntry={true}
+            style={[styles.input, confPwValidStyle(),]}
+          />
+        </View>
       </View>
 
       {narComponent}
 
       <View style={styles.leftDecoratedContainer}>
-        <Button
-          title={'Signup'}
-          style={styles.input}
+        <TouchableHighlight
+          style={styles.loginButton}
           onPress={doSignup}
           disabled={!narVisible}
-        />
+          underlayColor='rgb(128, 180, 220)'>
+          <Text style={styles.loginText}>Signup</Text>
+        </TouchableHighlight>
+
       </View>
     </View>
   );
@@ -190,8 +207,6 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
     margin: 20,
     backgroundColor: '#ecf0f1',
   },
@@ -201,10 +216,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     paddingVertical: "10",
-
-    // padding: "50",
+    alignSelf: 'center',
     alignItems: 'center',
-    // margin: "auto",
     backgroundColor: '#ecf0f1',
   },
 
@@ -220,15 +233,33 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     resizeMode: 'contain',
-    // marginTop: 3,
-    // marginLeft: -10,
+  },
+
+  loginButton: {
+    width: 280,
+    height: 42,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    marginBottom: 10,
+    backgroundColor: 'rgb(33, 150, 243)',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#fff'
+  },
+  loginText: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 
   input: {
-    width: 320,
+    width: 200,
     height: 32,
     padding: 10,
     borderWidth: 1,
+    borderRadius: 4,
     borderColor: 'black',
     marginBottom: 10,
   },
@@ -251,9 +282,6 @@ const styles = StyleSheet.create({
   welcomeImage: {
     width: 20,
     height: 20,
-    // resizeMode: 'contain',
-    // marginTop: 3,
-    // marginLeft: -10,
   },
   getStartedContainer: {
     alignItems: 'center',

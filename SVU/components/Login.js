@@ -1,15 +1,10 @@
-import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { ActivityIndicator, Alert, Modal, Button, TextInput, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
+import { ActivityIndicator, Alert, Modal, Button, TextInput, Image, Platform, StyleSheet, Text, TouchableOpacity, TouchableHighlight, View } from 'react-native';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-// import { UserInterfaceIdiom } from 'expo-constants';
-
 import { SVUSessionContext } from '../hooks/useSVUSessionContext';
-
 
 
 export function LoginForm() {
@@ -21,31 +16,40 @@ export function LoginForm() {
   return (
     <View style={styles.container}>
       <View style={styles.leftDecoratedContainer}>
-        <MaterialIcons name="email" size={24} color="black" />
-        <TextInput
-          value={userId}
-          // leftIcon={{ type: 'font-awesome', name: 'lock' }}
-          onChangeText={(username) => { setUserId(username) }}
-          placeholder={'Username'}
-          style={styles.input}
-        />
+        <View style={{ flex: 0.2, }}>
+          <MaterialIcons name="email" size={24} color="black" />
+        </View>
+        <View style={{ flex: 1 }}>
+          <TextInput
+            value={userId}
+            // leftIcon={{ type: 'font-awesome', name: 'lock' }}
+            onChangeText={(username) => { setUserId(username) }}
+            placeholder={'Username'}
+            style={styles.input}
+          />
+        </View>
       </View>
       <View style={styles.leftDecoratedContainer}>
-        <MaterialCommunityIcons name="textbox-password" size={24} color="black" />
-        <TextInput
-          value={password}
-          onChangeText={(password) => { setPassword(password) }}
-          placeholder={'Password'}
-          secureTextEntry={true}
-          style={styles.input}
-        />
+        <View style={{ flex: 0.17, }}>
+          <MaterialCommunityIcons name="textbox-password" size={24} color="black" />
+        </View>
+        <View style={{ flex: 1 }}>
+          <TextInput
+            value={password}
+            onChangeText={(password) => { setPassword(password) }}
+            placeholder={'Password'}
+            secureTextEntry={true}
+            style={styles.input}
+          />
+        </View>
       </View>
       <View style={styles.leftDecoratedContainer}>
-        <Button
-          title={'Login'}
-          style={styles.input}
+        <TouchableHighlight
+          style={styles.loginButton}
           onPress={() => { doLogin(userId, password) }}
-        />
+          underlayColor='rgb(128, 180, 220)'>
+          <Text style={styles.loginText}>Login</Text>
+        </TouchableHighlight>
       </View>
     </View>
   );
@@ -60,8 +64,6 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
     margin: 20,
     backgroundColor: '#ecf0f1',
   },
@@ -71,10 +73,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     paddingVertical: "10",
-
-    // padding: "50",
+    alignSelf: 'center',
     alignItems: 'center',
-    // margin: "auto",
     backgroundColor: '#ecf0f1',
   },
 
@@ -83,8 +83,28 @@ const styles = StyleSheet.create({
     height: 32,
     padding: 10,
     borderWidth: 1,
+    borderRadius: 4,
     borderColor: 'black',
     marginBottom: 10,
+  },
+
+  loginButton: {
+    width: 280,
+    height: 42,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    marginBottom: 10,
+    backgroundColor: 'rgb(33, 150, 243)',
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: '#fff'
+  },
+  loginText: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 
   developmentModeText: {
