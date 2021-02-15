@@ -15,13 +15,22 @@
 | redis client | [NodeJs client](https://www.npmjs.com/package/redis) |
 | mongodb driver | [Quick start](https://mongodb.github.io/node-mongodb-native/3.5/quick-start/quick-start/) |
 
+## Running the services/api
+To start the services/api, navigate to the directory **services/api** and run one of the following npm commands.
+
+```bash
+cd services/api
+npm install # you have to insatll node_modules
+npm run start-dev # you can open iOS, Android, or web from here, or run them directly with the commands below.
+```
 
 ## Running the SVU Project
 To start the SVU project, navigate to the directory and run one of the following npm commands.
 
 ```bash
 cd SVU
-npm start # you can open iOS, Android, or web from here, or run them directly with the commands below.
+npm install # you have to insatll node_modules
+npm run web # you can open iOS, Android, or web from here, or run them directly with the commands below.
 npm run android
 npm run ios
 npm run web
