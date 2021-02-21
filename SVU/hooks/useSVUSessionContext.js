@@ -19,21 +19,21 @@ export const SVUSessionProvider = props => {
   const [sound, setSound] = React.useState();
 
   async function playSound() {
-    console.log('Loading Sound');
+    // console.log('Loading Sound');
     const { sound } = await Audio.Sound.createAsync(
       require('../assets/sounds/Blow.m4a'),
       { shouldPlay: true }
     );
     setSound(sound);
 
-    console.log('Playing Sound');
+    // console.log('Playing Sound');
     await sound.playAsync();
   }
 
   React.useEffect(() => {
     return sound
       ? () => {
-        console.log('Unloading Sound');
+        // console.log('Unloading Sound');
         sound.unloadAsync();
       }
       : undefined;
@@ -56,7 +56,6 @@ export const SVUSessionProvider = props => {
     apiError: "",
     wsClient: null,
     conversations: {},
-    activeConversationId: null,
   };
 
 
@@ -88,13 +87,7 @@ export const SVUSessionProvider = props => {
       case "CONV_UPDT":
         // console.log("sesionReducer - 4: ", action.newState);
         newState = Object.assign(newState, state);
-        newState.conversations = Object.assign({}, newState.conversations, action.newState.conversations);
-        return newState;
-
-      case "ACTIVE_CONV":
-        // console.log("sesionReducer - 5: ", action.newState);
-        newState = Object.assign(newState, state);
-        newState.activeConversationId = Object.assign({}, newState.activeConversationId, action.newState.activeConversationId);
+        newState.conversations = Object.assign({}, action.newState.conversations);
         return newState;
 
       default:
@@ -107,20 +100,6 @@ export const SVUSessionProvider = props => {
 
   const doLogout = (logoutAllDevices = false) => {
   }
-
-
-
-  const setActiveConversationId = (actConvId) => {
-    let sessionUpdateAction = {
-      type: "ACTIVE_CONV",
-      newState: {
-        activeConversationId: actConvId,
-      }
-    };
-    console.log(actConvId);
-
-    dispatchSessionUpdate(sessionUpdateAction);
-  };
 
 
   /**
@@ -255,7 +234,7 @@ export const SVUSessionProvider = props => {
 
     wsClient.onmessage = async function (e) {
       if (typeof e.data === 'string') {
-        console.log("Received: '" + e.data + "'");
+        // console.log("Received: '" + e.data + "'");
         fetchNewConversations();
       }
       await playSound();
@@ -466,7 +445,7 @@ export const SVUSessionProvider = props => {
 
 
   // pass the init context value in provider and return
-  return (<SVUSessionContext.Provider value={{ svuSession, setActiveConversationId, APIActivityInProgress, APIError, doLogin, doLogout, apiCall }}>{children}</SVUSessionContext.Provider>);
+  return (<SVUSessionContext.Provider value={{ svuSession, APIActivityInProgress, APIError, doLogin, doLogout, apiCall }}>{children}</SVUSessionContext.Provider>);
 };
 
 

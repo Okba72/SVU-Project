@@ -6,12 +6,21 @@ import { AntDesign } from '@expo/vector-icons';
 import { MonoText } from '../components/StyledText';
 
 import { ConversationList } from '../components/ConversationList';
+import { AConversation } from '../components/AConversation';
+import { SVUSessionContext } from '../hooks/useSVUSessionContext';
+
 
 export default function HomeScreen() {
+  const { svuSession, APIActivityInProgress, doLogin } = React.useContext(SVUSessionContext);
 
   //state
+  const [activeConversationId, setActiveConversationId] = React.useState(null);
 
-  const convListings = (<ConversationList />)
+  let displayComponent = (<ConversationList setActiveConversationId={setActiveConversationId} />)
+
+  if (activeConversationId) {
+    displayComponent = (<AConversation activeConversationId={activeConversationId} setActiveConversationId={setActiveConversationId} />)
+  }
 
   return (
     <View style={styles.container}>
@@ -21,7 +30,7 @@ export default function HomeScreen() {
           style={styles.welcomeImage}
         />
       </View>
-      {convListings}
+      {displayComponent}
     </View>
   );
 }

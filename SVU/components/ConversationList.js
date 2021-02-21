@@ -53,7 +53,7 @@ const CreateConversationModal = (props) => {
   }
 
   const createNewConversation = async () => {
-    console.log(`members=${members}, title=${title}`);
+    // console.log(`members=${members}, title=${title}`);
     let memberEmails = validateUserList(members);
 
     memberEmails.push(svuSession.userId);
@@ -64,7 +64,7 @@ const CreateConversationModal = (props) => {
       "titleText": title,
     }
 
-    console.log(payload);
+    // console.log(payload);
     try {
       let apiResponse = await apiCall("/conversation/create", payload);
 
@@ -120,7 +120,6 @@ const CreateConversationModal = (props) => {
               underlayColor='rgb(128, 180, 220)'>
               <Text style={styles.svuButtonText}>Start</Text>
             </TouchableHighlight>
-
           </View>
         </View>
       </Modal>
@@ -139,18 +138,14 @@ CreateConversationModal.defaultProps = {
 };
 
 
-export function ConversationList() {
+export function ConversationList(props) {
   const { svuSession, APIActivityInProgress, doLogin } = React.useContext(SVUSessionContext);
-  const [userId, setUserId] = React.useState("");
-  const [password, setPassword] = React.useState("");
-
-  const demoRecipients = ["ali", "ali, ouqbah", "assem", "ali, ouqbah, assem"];
-  const demoTitleText = ["First conversation", "First conversation", "First conversation", "First conversation"];
+  const { setActiveConversationId } = props;
 
   // console.log("svuSession", svuSession);
   const [createNewConvVisible, setCreateNewConvVisible] = React.useState(false);
 
-  console.log(`createNewConvVisible: ${createNewConvVisible}`)
+  // console.log(`createNewConvVisible: ${createNewConvVisible}`)
 
   const newConvModal = (<CreateConversationModal createNewConvVisible={createNewConvVisible} setCreateNewConvVisible={setCreateNewConvVisible} />)
 
@@ -175,6 +170,7 @@ export function ConversationList() {
       titleText={aRecip.title_text || ""}
       unread={aRecip.unread || false}
       key={aRecip._id}
+      setActiveConversationId={setActiveConversationId}
     />)
   });
 
@@ -184,8 +180,7 @@ export function ConversationList() {
         {convs}
       </ScrollView>
 
-      <View style={styles.newConversation}>
-
+      <View style={styles.bottomBar}>
         <TouchableOpacity
           onPress={() => { setCreateNewConvVisible(true) }}
           style={{}}>
@@ -236,16 +231,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
 
-  newConversation: {
-    // flex: 1,
-    // flexBasis: 0,
-    // flexGrow: 1,
-    // flexShrink: 0,
-
+  bottomBar: {
     flexDirection: 'column',
     justifyContent: 'flex-end',
     marginBottom: 36
   },
+
   developmentModeText: {
     marginBottom: 20,
     color: 'rgba(0,0,0,0.4)',
