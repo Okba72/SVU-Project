@@ -36,7 +36,7 @@ db.files.drop();
  * user messages collection
  */
 // var users = {
-// 	user_id: 'ali@gaaiat.com',
+// 	user_id: 'ouqbah@gmail.com',
 // 	password: 'string12345566668888',
 // 	active: false,
 // 	jwt_id: '',

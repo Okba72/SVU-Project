@@ -16,7 +16,7 @@ export function LoginForm() {
   return (
     <View style={styles.container}>
       <View style={styles.leftDecoratedContainer}>
-        <View style={{ flex: 0.2, }}>
+        <View style={{ flex: 0.17, }}>
           <MaterialIcons name="email" size={24} color="black" />
         </View>
         <View style={{ flex: 1 }}>
@@ -31,7 +31,7 @@ export function LoginForm() {
       </View>
       <View style={styles.leftDecoratedContainer}>
         <View style={{ flex: 0.17, }}>
-          <MaterialCommunityIcons name="textbox-password" size={24} color="black" />
+          <MaterialCommunityIcons name="form-textbox-password" size={24} color="black" />
         </View>
         <View style={{ flex: 1 }}>
           <TextInput
@@ -63,7 +63,7 @@ LoginForm.navigationOptions = {
 const styles = StyleSheet.create({
 
   container: {
-    flex: 1,
+    flex: 6,
     margin: 20,
     backgroundColor: '#ecf0f1',
   },
@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     backgroundColor: '#ecf0f1',
+    margin: 10
   },
 
   input: {
@@ -86,6 +87,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderColor: 'black',
     marginBottom: 10,
+    marginTop: 10,
   },
 
   loginButton: {
@@ -95,6 +97,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'black',
     marginBottom: 10,
+    marginTop: 10,
     backgroundColor: 'rgb(33, 150, 243)',
     borderRadius: 4,
     borderWidth: 1,
@@ -109,6 +112,7 @@ const styles = StyleSheet.create({
 
   developmentModeText: {
     marginBottom: 20,
+    marginTop: 10,
     color: 'rgba(0,0,0,0.4)',
     fontSize: 14,
     lineHeight: 19,

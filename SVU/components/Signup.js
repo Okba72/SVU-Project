@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ActivityIndicator, Alert, Modal, Button, TextInput, Image, Platform, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 
+// import { mdiAccountQuestionOutline } from '@mdi/js';
 
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -98,104 +99,105 @@ export function SignupForm(props) {
   const getNarControlsComponent = () => {
 
     if (!narVisible) {
-      return null;
+      return (
+        <View style={[styles.narContainer,]}>
+        </View>
+      );
     } else {
       return (
-        <View style={styles.container}>
 
-          <View style={styles.welcomeContainer}>
-            <Image
-              source={narImage}
-              style={styles.narImage}
-              alt='red dot'
-            />
-          </View>
+        <View style={[styles.narContainer,]}>
+          <Image
+            source={narImage}
+            style={styles.narImage}
+            alt='red dot'
+          />
 
           <View style={[styles.leftDecoratedContainer,]}>
-            {/* <MaterialCommunityIcons name="robot" size={24} color="red" /> */}
-            <View style={{ flex: 0.2, }}>
+          {/* <MaterialCommunityIcons name="robot" size={24} color="red" /> */}
+            <View style={{ flex: 0.17, }}>
               <FontAwesome5 name="robot" size={20} color="red" />
             </View>
             <View style={{ flex: 1 }}>
               <TextInput
                 value={narText}
                 onChangeText={(narText) => { setNarText(narText) }}
-                placeholder={'Enter the text you see on the image:'}
+                placeholder={'Enter the text you see on the image'}
                 secureTextEntry={false}
-                style={[styles.input,]}
+                style={[styles.input,{fontSize: 10}]}
               />
             </View>
           </View>
 
         </View>
       );
-    }
+}
   }
-  const narComponent = getNarControlsComponent();
+const narComponent = getNarControlsComponent();
 
-  console.log(`svuSession.apiActivityInProgress: ${svuSession.apiActivityInProgress}`)
-  return (
-    <View style={styles.container}>
-      <View style={styles.leftDecoratedContainer}>
-        <View style={{ flex: 0.2, }}>
-          <MaterialIcons name="email" size={24} color="black" />
-        </View>
-        <View style={{ flex: 1 }}>
-          <TextInput
-            value={userId}
-            // leftIcon={{ type: 'font-awesome', name: 'lock' }}
-            onChangeText={(username) => { updateUserid(username); }}
-            placeholder={'Username'}
-            style={styles.input}
-          />
-        </View>
+console.log(`svuSession.apiActivityInProgress: ${svuSession.apiActivityInProgress}`)
+return (
+  <View style={styles.container}>
+    <View style={styles.leftDecoratedContainer}>
+      <View style={{ flex: 0.17, }}>
+        <MaterialIcons name="email" size={24} color="black" />
       </View>
-
-
-      <View style={[styles.leftDecoratedContainer,]}>
-        <View style={{ flex: 0.17, }}>
-          <MaterialCommunityIcons name="textbox-password" size={24} color="black" />
-        </View>
-        <View style={{ flex: 1 }}>
-          <TextInput
-            value={password}
-            onChangeText={(newPassword) => { updatePassword(newPassword); }}
-            placeholder={'Password, at least 12 characters'}
-            secureTextEntry={true}
-            style={[styles.input, pwValidStyle(),]}
-          />
-        </View>
-      </View>
-
-      <View style={styles.leftDecoratedContainer}>
-        <View style={{ flex: 0.17, }}>
-          <MaterialCommunityIcons name="textbox-password" size={24} color="black" />
-        </View>
-        <View style={{ flex: 1 }}>
-          <TextInput
-            value={confirmPassword}
-            onChangeText={(newConfirmPassword) => { updateConfirmPassword(newConfirmPassword); }}
-            placeholder={'Confirm Password'}
-            secureTextEntry={true}
-            style={[styles.input, confPwValidStyle(),]}
-          />
-        </View>
-      </View>
-
-      {narComponent}
-
-      <View style={styles.leftDecoratedContainer}>
-        <TouchableHighlight
-          style={styles.loginButton}
-          onPress={doSignup}
-          disabled={!narVisible}
-          underlayColor='rgb(128, 180, 220)'>
-          <Text style={styles.loginText}>Signup</Text>
-        </TouchableHighlight>
-
+      <View style={{ flex: 1 }}>
+        <TextInput
+          value={userId}
+          // leftIcon={{ type: 'font-awesome', name: 'lock' }}
+          onChangeText={(username) => { updateUserid(username); }}
+          placeholder={'Username'}
+          style={styles.input}
+        />
       </View>
     </View>
-  );
+
+
+    <View style={[styles.leftDecoratedContainer,]}>
+      <View style={{ flex: 0.17, }}>
+        <MaterialCommunityIcons name="form-textbox-password" size={24} color="black" />
+      </View>
+      <View style={{ flex: 1 }}>
+        <TextInput
+          value={password}
+          onChangeText={(newPassword) => { updatePassword(newPassword); }}
+          placeholder={'Password, at least 12 characters'}
+          secureTextEntry={true}
+          style={[styles.input, pwValidStyle(),]}
+        />
+      </View>
+    </View>
+
+    <View style={styles.leftDecoratedContainer}>
+      <View style={{ flex: 0.17, }}>
+        <MaterialCommunityIcons name="form-textbox-password" size={24} color="black" />
+      </View>
+      <View style={{ flex: 1 }}>
+        <TextInput
+          value={confirmPassword}
+          onChangeText={(newConfirmPassword) => { updateConfirmPassword(newConfirmPassword); }}
+          placeholder={'Confirm Password'}
+          secureTextEntry={true}
+          style={[styles.input, confPwValidStyle(),]}
+        />
+      </View>
+    </View>
+
+    {narComponent}
+
+    <View style={styles.leftDecoratedContainer}>
+      <TouchableHighlight
+        style={styles.loginButton}
+        onPress={doSignup}
+        disabled={!narVisible}
+        underlayColor='rgb(128, 180, 220)'>
+        <Text style={styles.loginText}>Signup</Text>
+      </TouchableHighlight>
+
+    </View>
+  </View>
+);
 }
 
 SignupForm.navigationOptions = {
@@ -206,19 +208,19 @@ SignupForm.navigationOptions = {
 const styles = StyleSheet.create({
 
   container: {
-    flex: 1,
+    flex: 6,
     margin: 20,
     backgroundColor: '#ecf0f1',
   },
 
   leftDecoratedContainer: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     paddingVertical: "10",
     alignSelf: 'center',
     alignItems: 'center',
     backgroundColor: '#ecf0f1',
+    margin: 10
   },
 
   validStyleRed: {
@@ -230,12 +232,24 @@ const styles = StyleSheet.create({
   },
 
   narImage: {
-    width: 200,
-    height: 200,
+    flex: 1,
+    width: 300,
+    height: 100,
     resizeMode: 'contain',
   },
 
+  narContainer: {
+    flex: 4,
+    justifyContent: 'center',
+    paddingVertical: "10",
+    alignSelf: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ecf0f1',
+    margin: 10
+  },
+
   loginButton: {
+    flex: 1,
     width: 280,
     height: 42,
     padding: 10,
@@ -273,11 +287,6 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     paddingTop: 30,
-  },
-  welcomeContainer: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
   },
   welcomeImage: {
     width: 20,

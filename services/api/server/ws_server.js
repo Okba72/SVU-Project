@@ -332,8 +332,4 @@ class WSConnectionServer {
     }
 }
 
-// setInterval(() => {
-//     WSConnectionServer.notifyClients("ali@gaaiat.com", {a: 1, b:2});
-// }, 5000);
-
 export default WSConnectionServer;

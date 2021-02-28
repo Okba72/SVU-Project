@@ -47,7 +47,7 @@ const getToken = (userId) => {
     return token;
 }
 
-const sendMessage = (userId, wssServerUrl, payload) => {
+const sendMessage = (wssServerUrl, payload) => {
     const client = new WebSocketClient();
     //TODO: This can be further optimized to re-use tokens until they are about to expire.
     const token = getToken("svu-api-server");

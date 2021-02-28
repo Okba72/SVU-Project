@@ -215,7 +215,7 @@ router.post("/newMessage", async (req, res) => {
     try {
       // TODO: get the wss url from redis
       // console.log(wsMessage);
-      await sendMessage("ali@gaaiat.com", "wss://localhost:18001", wsMessage);
+      await sendMessage("wss://localhost:18001", wsMessage);
     } catch (err) {
       console.log(err);
     }
@@ -286,7 +286,7 @@ router.post("/create", async (req, res) => {
     try {
       // TODO: get the wss url from redis
       // console.log(wsMessage);
-      await sendMessage("ali@gaaiat.com", "wss://localhost:18001", wsMessage);
+      await sendMessage("wss://localhost:18001", wsMessage);
     } catch (err) {
       console.log(err);
     }
@@ -365,7 +365,7 @@ router.post("/leave", async (req, res) => {
     try {
       // TODO: get the wss url from redis
       // console.log(wsMessage);
-      await sendMessage("ali@gaaiat.com", "wss://localhost:18001", wsMessage);
+      await sendMessage("wss://localhost:18001", wsMessage);
     } catch (err) {
       console.log(err);
     }
