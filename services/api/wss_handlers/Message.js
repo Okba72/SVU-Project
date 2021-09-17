@@ -14,7 +14,7 @@ const inputMessageSchema = {
      * @param {*} inputMessage 
      */
     async handleRequset(inputMessage) {
-        console.log("handling this message: ", inputMessage);
+        // console.log("handling this message: ", inputMessage);
         let reply = {
             replyTo: ["ouqbah@gaaiat.com"],
             messgaeId: 1233334,

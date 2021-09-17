@@ -5,30 +5,33 @@
     "app_title": "SVU Application",
     "app_version": "1.0.0",
     "app_url_domain": "localhost",
-    "external_server_url": "https://localhost:18000",
+    "external_server_url": "https://localhost",
     "pid_file_path": "/var/run/svu_app.pid",
-    "login_url": "https://localhost:19006/",
+    "login_url": "https://localhost/",
     "wss_server": {
         "ssl": {
-            "cert_file": "config/ssl/cert.pem",
-            "key_file": "config/ssl/key.pem"
+            "cert_file": "../../ssl/certs/cert.pem",
+            "key_file": "../../ssl/certs/key.pem"
         },
         "wss_port": 18001,
         "protocols": ["svu-protocol"],
         "wss_handlers_root": "wss_handlers",
-        "allow_origins": ["https://localhost:19006", "https://localhost:18000"]
+        "allow_origin": ["https://localhost", "https://localhost:18001"]
     },
     "app": {
         "ssl": {
-            "cert_file": "./ssl/cert.pem",
-            "key_file": "./ssl/key.pem"
+            "cert_file": "../../ssl/certs/cert.pem",
+            "key_file": "../../ssl/certs/key.pem"
         },
         "security": {
             "jwt_header_name": "",
             "session_duration": 3600,
-            "allow_origin": "https://localhost:19006"
+            "allow_origin": ["https://localhost"]
         },
         "third_party_oauth": {},
+        "blob_storage": {
+            "path": "../../blob_storage"
+        },
         "database": {
             "host_seed": "localhost:27017",
             "login_id": "svu_db_user",

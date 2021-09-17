@@ -34,7 +34,7 @@ export const SVUSessionProvider = props => {
     return sound
       ? () => {
         // console.log('Unloading Sound');
-        sound.unloadAsync();
+        // sound.unloadAsync();
       }
       : undefined;
   }, [sound]);
@@ -270,6 +270,12 @@ export const SVUSessionProvider = props => {
 
     dispatchSessionUpdate(sessionUpdateAction);
 
+
+    let contentType = "application/json";
+    if (typeof (payload) == "FormData") {
+      contentType = "multipart/form-data";
+    }
+
     // Default options are marked with *
     // console.log("body: " + JSON.stringify(payload));
 
@@ -280,7 +286,7 @@ export const SVUSessionProvider = props => {
       credentials: "include", // include, *same-origin, omit
       headers: new Headers({
         "Authorization": svuSession.bearerToken,
-        "Content-Type": "application/json",
+        "Content-Type": contentType,
         "Accept": "application/json",
       }),
       // "Content-Type": "application/x-www-form-urlencoded",
@@ -445,7 +451,7 @@ export const SVUSessionProvider = props => {
 
 
   // pass the init context value in provider and return
-  return (<SVUSessionContext.Provider value={{ svuSession, APIActivityInProgress, APIError, doLogin, doLogout, apiCall }}>{children}</SVUSessionContext.Provider>);
+  return (<SVUSessionContext.Provider value={{ svuSession, APIActivityInProgress, APIError, doLogin, doLogout, apiCall, }}>{children}</SVUSessionContext.Provider>);
 };
 
 

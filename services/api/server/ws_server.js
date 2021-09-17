@@ -63,7 +63,7 @@ const WSS_CONFIG_SCHEMA = {
             },
             "minItems": 1
         },
-        "allow_origins": {
+        "allow_origin": {
             "description": "the array of origins accepted by the WSS server",
             "type": "array",
             "items": {
@@ -78,7 +78,7 @@ const WSS_CONFIG_SCHEMA = {
             "minLength": 2
         }
     },
-    "required": ["ssl", "wss_port", "protocols", "allow_origins", "wss_handlers_root"],
+    "required": ["ssl", "wss_port", "protocols", "allow_origin", "wss_handlers_root"],
     "additionalProperties": false
 };
 
@@ -116,12 +116,12 @@ class WSConnectionServer {
 
         let wsPort = get(config, "wss_port", -1);
 
-        const secretKey = fs.readFileSync(path.resolve("./", get(config, "ssl.key_file")));
+        const secretKey = fs.readFileSync(path.resolve(get(config, "ssl.key_file")));
 
         // creating the websoket server:
         let httpServerForWS = https.createServer({
-            key: fs.readFileSync(path.resolve("./", get(config, "ssl.key_file"))),
-            cert: fs.readFileSync(path.resolve("./", get(config, "ssl.cert_file")))
+            key: fs.readFileSync(path.resolve(get(config, "ssl.key_file"))),
+            cert: fs.readFileSync(path.resolve(get(config, "ssl.cert_file")))
         }, (request, response) => {
             logger.info("Received request for " + request.url);
             response.writeHead(403);
@@ -166,7 +166,7 @@ class WSConnectionServer {
                 let authRe = /Bearer\s+(.*)/;
                 let matchFrag = authToken.match(authRe);
 
-                if (!get(config, "allow_origins").includes(request.origin)) {
+                if (!get(config, "allow_origin").includes(request.origin)) {
                     logger.warn(`origin of request: ${request.origin} is forbidden!`);
                     return null;
                 }
@@ -177,7 +177,7 @@ class WSConnectionServer {
                     // put logic here to detect whether the client sent authorization:
                     try {
                         let decToken = verify(matchFrag[1], secretKey);
-                        console.log(decToken);
+                        // console.log(decToken);
                         return decToken;
                     } catch (err) {
                         logger.warn("authorization token failed verification!!");
@@ -312,7 +312,7 @@ class WSConnectionServer {
      * @param {*} payload 
      */
     static notifyClients(userId, payload) {
-        console.log(userId, payload);
+        // console.log(userId, payload);
         let jsonPayload = JSON.stringify(payload, null, 2);
         for (const addRef in WSConnectionServer.userIdToConnectionCache[userId]) {
             let connection = WSConnectionServer.userIdToConnectionCache[userId][addRef];

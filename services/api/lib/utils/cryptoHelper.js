@@ -15,7 +15,7 @@ class CryptoHelper {
      * @param {*} appConfig 
      */
     constructor(appConfig) {
-        this.secretKey = fs.readFileSync(path.resolve("./config", appConfig.get("app:ssl:key_file"))).toString("utf8");
+        this.secretKey = fs.readFileSync(path.resolve(appConfig.get("app:ssl:key_file"))).toString("utf8");
     }
 
 

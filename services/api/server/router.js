@@ -41,7 +41,7 @@ const mountSecurityModule = (app, appConfig) => {
 
   const domainUrl = new URL(appConfig.get("external_server_url"));
 
-  const secretKey = fs.readFileSync(path.resolve("./config", appConfig.get("app:ssl:key_file")));
+  const secretKey = fs.readFileSync(path.resolve(appConfig.get("app:ssl:key_file")));
   const opts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: secretKey,
@@ -96,6 +96,7 @@ const __registerModel = (app, config, modelRelPath) => {
         title: config.get("app_title"),
         version: config.get("app_version"),
       },
+      host: config.get("external_server_url"),
     },
     // Path to the API docs
     apis: ["./models/" + modelRelPath + ".js"],

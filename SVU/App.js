@@ -16,7 +16,7 @@ export default function App(props) {
   } else {
     return (
       <View style={styles.container}>
-        <SVUSessionProvider apiUrl='https://localhost:18000/svu/api' wsUrl='wss://localhost:18001'>
+        <SVUSessionProvider apiUrl='https://localhost/svu/api' wsUrl='wss://localhost:18001'>
           <SVURouter />
         </SVUSessionProvider>
       </View>

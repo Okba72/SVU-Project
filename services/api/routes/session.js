@@ -94,7 +94,7 @@ router.post("/login", async (req, res) => {
         expireTimeMillis: expireTimeMillis,
     };
 
-    const secretKey = fs.readFileSync(path.resolve("./config", appConfig.get("app:ssl:key_file")));
+    const secretKey = fs.readFileSync(path.resolve(appConfig.get("app:ssl:key_file")));
     const domainUrl = new URL(appConfig.get("external_server_url"));
     const opts = {
         expiresIn: 3600,

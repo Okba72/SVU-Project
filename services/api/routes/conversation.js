@@ -135,6 +135,10 @@ router.get("/messages/:conversationId/:beforeTimeMillis", async (req, res) => {
 });
 
 
+
+
+
+
 /**
  * @swagger
  *  /newMessage:
@@ -159,6 +163,22 @@ router.get("/messages/:conversationId/:beforeTimeMillis", async (req, res) => {
  *                                  properties:
  *                                      messageText:
  *                                          type: string
+ *                                      sharedFile:
+ *                                          type: object
+ *                                          properties:
+ *                                            fileName:
+ *                                              type: string
+ *                                            fileSize:
+ *                                              type: integer
+ *                                            fileType:
+ *                                              type: string
+ *                                            fileUri:
+ *                                              type: string
+ *                                          required:
+ *                                              - fileName
+ *                                              - fileSize
+ *                                              - fileType
+ *                                              - fileUri
  *                                  required:
  *                                      - messageText
  *                          required:
@@ -174,6 +194,7 @@ router.post("/newMessage", async (req, res) => {
 
   let conversationId = req.body["conversationId"];
   let message = req.body["message"];
+  // console.log(`\n\nreq.body: ${JSON.stringify(req.body, 4, null)}\n\n`)
 
   let existingConv = await findOne("conversations",
     {
@@ -187,6 +208,14 @@ router.post("/newMessage", async (req, res) => {
     return res.json({});
   }
 
+  if (message.sharedFile) {
+    console.log("\n\n shared file present !!");
+    let tempFileURI = message.sharedFile.fileUri;
+
+
+    message.sharedFile.fileUri = "******";
+  }
+
   let insOp = await updateOne("conversations",
     { _id: conversationId },
     {
@@ -196,6 +225,7 @@ router.post("/newMessage", async (req, res) => {
           message_time: messageTime,
           sender: req.user.userId,
           message_text: message.messageText,
+          shared_file: message.sharedFile,
         }
       }
     })

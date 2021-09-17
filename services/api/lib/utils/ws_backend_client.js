@@ -12,7 +12,7 @@ import AppLoggerFactory from "../../server/app_logger";
 const SERVER_SIDE_JWTID = "1234506789";
 
 const appConfig = getConfig();
-const secretKey = fs.readFileSync(path.resolve("./config", appConfig.get("app:ssl:key_file")));
+const secretKey = fs.readFileSync(path.resolve(appConfig.get("app:ssl:key_file")));
 const origin = appConfig.get("external_server_url");
 const domainUrl = new URL(origin);
 
@@ -71,7 +71,7 @@ const sendMessage = (wssServerUrl, payload) => {
                 let messageObj = {};
                 try {
                     if (message.type === "utf8") {
-                        logger.info("WSSClient received: " + message.utf8Data);
+                        // logger.info("WSSClient received: " + message.utf8Data);
                         messageObj = JSON.parse(message.utf8Data);
                     } else {
                         logger.warn("WSSClient received unrecongizable (non UTF8) message! ");

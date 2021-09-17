@@ -2,6 +2,10 @@ import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
 import { ActivityIndicator, Alert, Modal, Button, TextInput, Image, Platform, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 
+
+import * as DocumentPicker from 'expo-document-picker';
+import * as FileSystem from 'expo-file-system';
+
 import { ScrollView } from 'react-native-gesture-handler';
 import { AntDesign } from '@expo/vector-icons';
 import { MonoText } from '../components/StyledText';
@@ -78,6 +82,32 @@ export function AConversation(props) {
   const { activeConversationId, setActiveConversationId } = props;
   const { svuSession, APIActivityInProgress, apiCall } = React.useContext(SVUSessionContext);
   const [newMessageText, setNewMessageText] = React.useState("");
+  const [doc, setDoc] = React.useState(null);
+
+  const pickDocument = async () => {
+    let result = await DocumentPicker.getDocumentAsync({ type: "*/*", copyToCacheDirectory: true }).then(
+      (response) => {
+        if (response.type == 'success') {
+          let { name, size, uri } = response;
+          let nameParts = name.split('.');
+          let fileType = nameParts[nameParts.length - 1];
+          let fileToUpload = {
+            name: name,
+            size: size,
+            uri: uri,
+            type: "application/" + fileType
+          };
+          // console.log(fileToUpload, '...............file')
+          setDoc(fileToUpload);
+          return fileToUpload;
+        }
+      }).then(
+        (doc) => {
+          // console.log("Doc: " + doc.uri);
+        }
+      );
+    // console.log(result);
+  }
 
 
   const leaveConversation = async () => {
@@ -94,20 +124,39 @@ export function AConversation(props) {
   }
 
   const sendMessage = async () => {
-    if (!newMessageText | newMessageText.length <= 0) {
-      return;
-    }
-
     let payload = {
       "conversationId": activeConversationId,
       "message": {
         "messageText": newMessageText,
+        "sharedFile": null,
       }
+    }
+
+    if (!newMessageText | newMessageText.length <= 0) {
+      if (doc != null) {
+        payload.message.messageText = doc.name;
+
+        console.log(`new file name: ${doc.name} `);
+      } else {
+        return;
+      }
+    }
+
+    if (doc != null) {
+      // payload.sharedFile = doc;
+      console.log("Doc: " + JSON.stringify(doc.uri, 4, null));
+      console.log("Doc: " + doc.uri);
+      payload.message.sharedFile = {};
+      payload.message.sharedFile.fileName = doc.name;
+      payload.message.sharedFile.fileSize = doc.size;
+      payload.message.sharedFile.fileType = doc.type;
+      payload.message.sharedFile.fileUri = "SVUAPP" + JSON.stringify(doc.uri);
     }
 
     try {
       let apiResponse = await apiCall("/conversation/newMessage", payload);
       setNewMessageText("");
+      setDoc(null);
     } catch (error) {
       console.log(`apiCall Error: ${error}`);
     }
@@ -170,6 +219,14 @@ export function AConversation(props) {
       </ScrollView>
 
       <View style={styles.bottomBar}>
+        <TouchableHighlight
+          style={[styles.svuButton, { width: 'auto', height: 48, marginRight: 4, }]}
+          onPress={() => pickDocument()}
+          underlayColor='rgb(128, 180, 220)'>
+          <Text style={[styles.svuButtonText]}>Upload</Text>
+        </TouchableHighlight>
+
+
         <TextInput
           value={newMessageText}
           multiline={true}

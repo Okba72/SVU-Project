@@ -25,7 +25,7 @@ class ImageHelper {
      * @param {*} appConfig 
      */
     constructor(appConfig) {
-        // const secretKey = fs.readFileSync(path.resolve("./config", appConfig.get("app:ssl:key_file")));
+        // const secretKey = fs.readFileSync(appConfig.get("app:ssl:key_file"));
         // this.key = config.get()
     }
 
