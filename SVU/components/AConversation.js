@@ -33,32 +33,117 @@ export function AConversationSummary(props) {
   )
 }
 
+/**
+ * 
+ * @param {*} props 
+ * @returns 
+ */
+export function SVUSharedFile(props) {
+  const { svuSession, apiCall } = React.useContext(SVUSessionContext);
+  const { conversationId, sharedFile } = props;
+  const [dataUri, setDataUri] = React.useState("");
 
+  React.useEffect(
+    () => {
+      async function getDataUri() {
+        const autoDownloadFileTypes = [
+          "application/png",
+          "application/jpeg",
+          "application/jpg",
+          "application/gif",
+        ]
+
+        if (autoDownloadFileTypes.includes(sharedFile.fileType)) {
+          let payload = await apiCall("/conversation/sharedFile/" + `${conversationId}/${sharedFile.fileUri}`);
+          setDataUri({ uri: payload });
+        } else if( sharedFile.fileType.trim() === "application/pdf") {
+          setDataUri(require('../assets/images/pdfFileImage.png'));
+        } else {
+          setDataUri(require('../assets/images/genericDocImage.png'));
+        }
+      }
+
+      getDataUri();
+      
+      return;
+    }, []
+  )
+
+  return (
+    <Image
+      source={dataUri}
+      style={[styles.sharedFileImage, { borderColor: "grey", borderWidth: 2 }]}
+      alt='red dot'
+    />
+  )
+}
+
+/**
+ * 
+ * @param {*} props 
+ * @returns 
+ */
 export function AMessage(props) {
   const { svuSession, apiCall } = React.useContext(SVUSessionContext);
-  const { id, sender, message, msgDate, } = props;
+  const { id, conversationId, sender, message, msgDate, sharedFile } = props;
 
   let messageStyle = styles.messageSenderSelf;
   let senderLabel = null;
+  let fileLable = null;
+
+  if (sharedFile) {
+    const tmpImgUri = sharedFile.fileUri.replaceAll("\"", "");
+    let alignment = { alignSelf: 'flex-end' };
+
+    if (sender != svuSession.userId) {
+      alignment = { alignSelf: 'flex-start' };
+    }
+
+    fileLable = (
+      <View style={styles.sharedFileContainer}>
+        <TouchableOpacity
+          style={[styles.sharedFileImage, alignment]}
+          onPress={() => {
+            // downloadFile(`${conversationId}/${sharedFile.}`);
+            downloadFile();
+          }
+          }>
+          <SVUSharedFile conversationId={conversationId} sharedFile={sharedFile} />
+        </TouchableOpacity>
+      </View>
+    )
+  }
 
   if (sender != svuSession.userId) {
     messageStyle = styles.messageSenderOther;
     senderLabel = (
       <Text style={[messageStyle, { fontWeight: 'bold' }]}
-      // onPress={() => { setActiveConversationId(conversationId) }}
       >{sender}</Text>
     )
+  }
+
+
+  async function downloadFile() {
+    console.log(` ${sharedFile.fileName}`);
+    console.log(`FileSystem.documentDirectory = ${FileSystem.documentDirectory}`);
+
+
+    let apiResponse = await apiCall("/conversation/sharedFile/" + "6148579abc2f78304d4cecb1/ae3ab45685a40bc9eec319bfef29f2cd392b415a6a9b4f8377e1c9db1a74c216");
   }
 
 
   return (
     <View style={styles.messagesContainer}>
       {senderLabel}
-      <Text style={[messageStyle, {}]}
-      // onPress={() => { setActiveConversationId(conversationId) }}
-      >{message}</Text>
+      <View style={styles.messagesContainer}>
+        <Text style={[messageStyle, {}]}>
+          {message}
+        </Text>
+      </View>
+      {fileLable}
+
       {/* <Text style={styles.titleText}>{message}</Text> */}
-    </View>
+    </View >
   )
 }
 
@@ -85,6 +170,11 @@ export function AConversation(props) {
   const [doc, setDoc] = React.useState(null);
 
   const pickDocument = async () => {
+    let cleanNewMessage = newMessageText;
+    if (doc != null) {
+      cleanNewMessage = cleanNewMessage.replaceAll(`\uD83D\uDCCE ${doc.name}`, "").trim();
+    }
+
     let result = await DocumentPicker.getDocumentAsync({ type: "*/*", copyToCacheDirectory: true }).then(
       (response) => {
         if (response.type == 'success') {
@@ -98,7 +188,10 @@ export function AConversation(props) {
             type: "application/" + fileType
           };
           // console.log(fileToUpload, '...............file')
+
           setDoc(fileToUpload);
+          let clipChar = "\u01F4CE";
+          setNewMessageText(`${cleanNewMessage}\n\uD83D\uDCCE ${name}`);
           return fileToUpload;
         }
       }).then(
@@ -132,25 +225,19 @@ export function AConversation(props) {
       }
     }
 
-    if (!newMessageText | newMessageText.length <= 0) {
-      if (doc != null) {
-        payload.message.messageText = doc.name;
-
-        console.log(`new file name: ${doc.name} `);
-      } else {
-        return;
-      }
+    if (!newMessageText.trim() | newMessageText.trim().length <= 0) {
+      setNewMessageText("");
+      return;
     }
 
-    if (doc != null) {
-      // payload.sharedFile = doc;
-      console.log("Doc: " + JSON.stringify(doc.uri, 4, null));
-      console.log("Doc: " + doc.uri);
+    if ((doc != null) && (newMessageText.indexOf(`\uD83D\uDCCE ${doc.name}`) >= 0)) {
+      // console.log("Doc: " + JSON.stringify(doc.uri, 4, null));
+      // console.log("Doc: " + doc.uri);
       payload.message.sharedFile = {};
       payload.message.sharedFile.fileName = doc.name;
       payload.message.sharedFile.fileSize = doc.size;
       payload.message.sharedFile.fileType = doc.type;
-      payload.message.sharedFile.fileUri = "SVUAPP" + JSON.stringify(doc.uri);
+      payload.message.sharedFile.fileUri = JSON.stringify(doc.uri);
     }
 
     try {
@@ -189,8 +276,10 @@ export function AConversation(props) {
   const msgs = messages.map((aMsg) => {
     return (<AMessage
       id={aMsg._id}
+      conversationId={activeConversationId}
       sender={aMsg.sender}
       message={aMsg.message_text}
+      sharedFile={aMsg.shared_file}
       msgDate={aMsg.message_time}
       key={aMsg._id}
     />)
@@ -261,18 +350,26 @@ const styles = StyleSheet.create({
     paddingRight: 20,
   },
 
-  horizontalLayout: {
-    // flexBasis: 0,
-    // flexGrow: 1,
-    // flexShrink: 0,
+  sharedFileImage: {
+    flex: 1,
+    width: 128,
+    height: 128,
+    resizeMode: 'contain',
+  },
 
-    // flex: 1,
-    // height: '90%',
-    // width: '100%',
+  sharedFileContainer: {
+    backgroundColor: "transparent",
+    alignItems: 'flex-end',
+    backgroundColor: '#fff',
+    width: '100%',
+    marginTop: 4,
+    marginBottom: 4,
+  },
+
+
+  horizontalLayout: {
     borderWidth: 0,
     flexDirection: 'row',
-    // justifyContent: "flex-start",
-    // alignItems: "flex-start",
     marginTop: 22
   },
 
@@ -300,13 +397,11 @@ const styles = StyleSheet.create({
   },
 
   messagesContainer: {
-    flex: 1,
     backgroundColor: '#fff',
     width: '95%',
     marginTop: 4,
     marginBottom: 4,
   },
-
 
   messageSenderSelf: {
     width: '95%',
@@ -408,20 +503,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 
-  // input: {
-  //   flex: 1,
-  //   width: 48,
-  //   height: 32,
-  //   paddingHorizontal: 10,
-  //   borderWidth: 1,
-  //   borderRadius: 12,
-  //   borderColor: 'grey',
-  //   marginBottom: 10,
-  //   margin: "0 auto",
-  //   textAlign: 'center',
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  // },
 
   conversationListContainer: {
     width: '100%',

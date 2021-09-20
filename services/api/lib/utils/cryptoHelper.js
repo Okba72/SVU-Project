@@ -47,7 +47,7 @@ class CryptoHelper {
      */
     genPasswordHash(password) {
         let salt = this.genRandomString(16);
-        let hash = crypto.createHmac("sha512", salt); 
+        let hash = crypto.createHmac("sha512", salt);
         hash.update(password);
         let value = hash.digest("hex");
         return value + ":" + salt;
@@ -62,7 +62,7 @@ class CryptoHelper {
     validatePassword(password, passwordHash) {
         let [expectedValue, salt] = passwordHash.split(":");
 
-        let hash = crypto.createHmac("sha512", salt); 
+        let hash = crypto.createHmac("sha512", salt);
         hash.update(password);
         let value = hash.digest("hex");
         return value == expectedValue;
@@ -106,6 +106,74 @@ class CryptoHelper {
 
         // return clearText;
     }
+
+    /**
+     * 
+     * @param {*} userId 
+     * @param {*} narText 
+     */
+    ecnryptMessageFileURI(fileUri) {
+        // Use the async `crypto.scrypt()` instead.
+
+        // console.log(`fileUri: ${fileUri}`);
+
+        const key = crypto.scryptSync(this.secretKey, this.genRandomString(24), 24);
+        const iv = Buffer.alloc(16, 0); // Initialization vector.
+        // const iv = crypto.randomBytes(16); // Initialization vector.
+        const cipher = crypto.createCipheriv("aes192", key, iv);
+
+        // console.log(`enc key is: ${key}`);
+        let cipherText = cipher.update(fileUri, "utf8", "base64");
+        cipherText += cipher.final("base64");
+        // console.log(cipherText);
+
+        let hash = crypto.createHmac("sha256", "salt");
+        hash.update(fileUri);
+        let encryptedFileIUriHash = hash.digest("hex");
+
+        cipherText = crypto.publicEncrypt(this.secretKey, key).toString("base64") + ":" + cipherText;
+        let retObj = {
+            encryptedFileIUri: cipherText,
+            encryptedFileIUriHash: encryptedFileIUriHash,
+        }
+
+        // console.log(cipherText);
+
+        return retObj;
+    }
+
+    /**
+     * 
+     * @param {*} narToken 
+     */
+    decryptMessageFileURI(encryptedFileUri) {
+
+        // console.log(`\n\n type of encryptedFileUri = ${typeof (encryptedFileUri)} \n\n`)
+        let encParts = encryptedFileUri.split(":");
+        // console.log(`\n\n type of encParts = ${typeof (encParts)} \n\n`)
+        // console.log(`encParts = ${encParts}`)
+
+        let encFileUri = encParts[1];
+        // console.log(`\n\n encFileUri = ${encFileUri} \n\n`)
+        // console.log(`\n\n encKey = ${encParts[0]} \n\n`)
+
+        let encKey = Buffer.from(encParts[0], "base64");
+        let key = crypto.privateDecrypt(this.secretKey, encKey);
+        // console.log(`\n\n type of encParts = ${typeof (encParts)} \n\n`)
+
+        // console.log(`dec key is: ${key}`);
+
+        const algorithm = 'aes192';
+        const iv = Buffer.alloc(16, 0); // Initialization vector.
+        const decipher = crypto.createDecipheriv(algorithm, key, iv);
+
+        // Encrypted using same algorithm, key and iv.
+        let clearFileUri = decipher.update(encFileUri, "base64", "utf8");
+        clearFileUri += decipher.final("utf8");
+
+        return clearFileUri;
+    }
+
 }
 
 export default new CryptoHelper(getConfig());

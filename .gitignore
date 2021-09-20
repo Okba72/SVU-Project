@@ -15,5 +15,7 @@
 **/*.patch
 **/*.log
 var
+blob_storage
+
 # macOS
 **/.DS_Store

@@ -9,6 +9,7 @@ import { Router } from "express";
 import { find, findOne, insertOne, updateOne } from "../server/database";
 import { sendMessage } from "../lib/utils/ws_backend_client";
 import isEmpty from "lodash/get";
+import BlobHelper from "../lib/utils/blobHelper";
 
 const router = Router();
 
@@ -63,13 +64,82 @@ router.get("/myConversations/:beforeTimeMillis", async (req, res) => {
       date_last_updated: { $lt: timeBefore },
       user_list: req.user.userId
     },
-    { limit: 100, sort: [["date_last_update", -1]], projection: { _id: 0, title_text: 1, user_list: 1 } });
+    { limit: 100, sort: [["date_last_update", -1]], projection: { _id: 0, title_text: 1, user_list: 1 } }
+  );
+
+  // for (let aConv of convs) {
+  //   // console.log(JSON.stringify(aConv, null, 4));  
+  //   for (let aMsg of aConv.messages) {
+  //     if (aMsg.shared_file) {
+  //       aMsg.shared_file.fileUri = await BlobHelper.readFile(aMsg.shared_file.fileUri);
+  //     }
+  //   }
+  // }
 
   let tempObj = {
     conversations: convs
   }
   return res.json(tempObj);
 });
+
+
+/**
+ * @swagger
+ * 
+ *  /sharedFile/{conversationId}/{fileHash}:
+ *    get:
+ *          description: Returns all messages for the specified conversationId, dated on or before beforeTimeMillis
+ *          security:
+ *              - bearerAuth: []
+ *          parameters:
+ *              - in: path
+ *                name: conversationId
+ *                required: true
+ *                type: string
+ *                description: conversationId for which messages are to be fetched.
+ *              - in: path
+ *                name: fileHash
+ *                required: true
+ *                type: string
+ *                description: file hash to retrieve.
+ *          responses:
+ *              200:
+ *                  description: TBD * 
+ */
+router.get("/sharedFile/:conversationId/:fileHash", async (req, res) => {
+  let conversationId = req.params["conversationId"];
+  let fileHash = req.params["fileHash"];
+
+
+  // console.log(`conversationId ${conversationId}`);
+  // console.log(`type of conversationId ${typeof (conversationId)}`);
+  // console.log(`fileHash ${fileHash}`);
+  // console.log(`type of fileHash ${typeof (fileHash)}`);
+
+  // console.log(`req.user.userId is: ${req.user.userId}`);
+
+  let aConversation = await findOne("conversations",
+    {
+      _id: conversationId,
+      'messages.shared_file.fileUri': fileHash,
+      user_list: req.user.userId,  // this is very important for security, only messages for user conversations are fetched.
+
+    },
+    { limit: 1000, sort: [["date_last_update", -1]], projection: { _id: 0, title_text: 1, user_list: 1, 'messages.shared_file': 1 } }
+  );
+
+  if (!aConversation | isEmpty(aConversation)) {
+    return res.json({});
+  }
+
+
+  let fileUri = await BlobHelper.readFile(fileHash);
+
+  res.header("Content-Type", "application/png");
+  res.write(fileUri);
+  res.end();
+});
+
 
 
 /**
@@ -100,6 +170,7 @@ router.get("/myConversations/:beforeTimeMillis", async (req, res) => {
  */
 router.get("/messages/:conversationId/:beforeTimeMillis", async (req, res) => {
 
+  // console.log(`\n\nentering ${"/messages/:conversationId/:beforeTimeMillis"}\n\n`)
   let conversationId = req.params["conversationId"];
 
   let timeBefore;
@@ -122,7 +193,8 @@ router.get("/messages/:conversationId/:beforeTimeMillis", async (req, res) => {
       'messages.message_time': { $lt: timeBefore },
       user_list: req.user.userId,  // this is very important for security, only messages for user conversations are fetched.
     },
-    { limit: 1000, sort: [["date_last_update", -1]], projection: { _id: 0, title_text: 1, user_list: 1, messages: 1 } });
+    { limit: 1000, sort: [["date_last_update", -1]], projection: { _id: 0, title_text: 1, user_list: 1, messages: 1 } }
+  );
 
   if (!aConversation | isEmpty(aConversation)) {
     return res.json({});
@@ -209,11 +281,12 @@ router.post("/newMessage", async (req, res) => {
   }
 
   if (message.sharedFile) {
-    console.log("\n\n shared file present !!");
     let tempFileURI = message.sharedFile.fileUri;
+    let blobFileUri = await BlobHelper.writeFile(tempFileURI);
 
+    // console.log(`\n\n ${blobFileUri}\n\n`);
 
-    message.sharedFile.fileUri = "******";
+    message.sharedFile.fileUri = blobFileUri;
   }
 
   let insOp = await updateOne("conversations",
