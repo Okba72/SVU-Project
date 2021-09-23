@@ -56,7 +56,7 @@ export function SVUSharedFile(props) {
         if (autoDownloadFileTypes.includes(sharedFile.fileType)) {
           let payload = await apiCall("/conversation/sharedFile/" + `${conversationId}/${sharedFile.fileUri}`);
           setDataUri({ uri: payload });
-        } else if( sharedFile.fileType.trim() === "application/pdf") {
+        } else if (sharedFile.fileType.trim() === "application/pdf") {
           setDataUri(require('../assets/images/pdfFileImage.png'));
         } else {
           setDataUri(require('../assets/images/genericDocImage.png'));
@@ -64,7 +64,7 @@ export function SVUSharedFile(props) {
       }
 
       getDataUri();
-      
+
       return;
     }, []
   )
@@ -86,6 +86,8 @@ export function SVUSharedFile(props) {
 export function AMessage(props) {
   const { svuSession, apiCall } = React.useContext(SVUSessionContext);
   const { id, conversationId, sender, message, msgDate, sharedFile } = props;
+
+  const [downloadResult, setDownloadResult] = React.useState(null);
 
   let messageStyle = styles.messageSenderSelf;
   let senderLabel = null;
@@ -127,8 +129,16 @@ export function AMessage(props) {
     console.log(` ${sharedFile.fileName}`);
     console.log(`FileSystem.documentDirectory = ${FileSystem.documentDirectory}`);
 
+    let dnldReqTokenUri = `/conversation/sharedFileDescriptor/${conversationId}/${encodeURIComponent(sharedFile.fileName)}/${encodeURIComponent(sharedFile.fileType)}/${sharedFile.fileUri}`;
+    let reqDownloadToken = await apiCall(dnldReqTokenUri);
 
-    let apiResponse = await apiCall("/conversation/sharedFile/" + "6148579abc2f78304d4cecb1/ae3ab45685a40bc9eec319bfef29f2cd392b415a6a9b4f8377e1c9db1a74c216");
+    console.log(reqDownloadToken)
+
+    let dnldReqUri = `${svuSession.apiUrl}/blob/${reqDownloadToken.fileDescrStr}`;
+    let result = await WebBrowser.openBrowserAsync(dnldReqUri);
+    setDownloadResult(result);
+
+    console.log(JSON.stringify(result, null, 4));
   }
 
 

@@ -107,14 +107,52 @@ class CryptoHelper {
         // return clearText;
     }
 
+
+
+    ecnryptBlobDownloadDescriptor(userId, conversationId, fileName, fileType, fileUri) {
+
+        let blobDescr = {
+            userId,
+            conversationId,
+            fileName,
+            fileType,
+            fileUri,
+            expireIn: (new Date()).getTime() + 10000, // expire in 10 seconds form now
+        };
+
+        let clearBuff = Buffer.from(JSON.stringify(blobDescr), "utf8");
+        let cipherBuff = crypto.publicEncrypt(this.secretKey, clearBuff);
+
+        return cipherBuff.toString("hex");
+    }
+
+    /**
+     * 
+     * @param {*} narToken 
+     */
+    decryptBlobDownloadDescriptor(cipherDescr) {
+
+        let cipherBuff = Buffer.from(cipherDescr, "hex");
+        let clearBuff = crypto.privateDecrypt(this.secretKey, cipherBuff);
+
+        let blobDescr = JSON.parse(clearBuff);
+
+        // console.log(`fileDescr clear: ${clearBuff}`);
+        // if (blobDescr.expireIn < (new Date().getTime())) {
+        //     return null;
+        // } else {
+        //     return blobDescr;
+        // }
+
+        return blobDescr;
+    }
+
     /**
      * 
      * @param {*} userId 
      * @param {*} narText 
      */
     ecnryptMessageFileURI(fileUri) {
-        // Use the async `crypto.scrypt()` instead.
-
         // console.log(`fileUri: ${fileUri}`);
 
         const key = crypto.scryptSync(this.secretKey, this.genRandomString(24), 24);

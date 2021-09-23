@@ -64,11 +64,11 @@ let pilot = async () => {
 
 
     if (appConfig.get("app:security:allow_origin").indexOf(req.headers.origin) !== -1) {
-      console.log(`header origin is in allow list: ${req.headers.origin}`);
+      // console.log(`header origin is in allow list: ${req.headers.origin}`);
       res.header("Access-Control-Allow-Origin", req.headers.origin);
     } else {
-      console.log(`header origin is NOT in allow list: ${req.headers.origin}`);
-      console.log(`restricting allow origin to:  ${appConfig.get("external_server_url")}`);
+      // console.log(`header origin is NOT in allow list: ${req.headers.origin}`);
+      // console.log(`restricting allow origin to:  ${appConfig.get("external_server_url")}`);
       res.header("Access-Control-Allow-Origin", appConfig.get("external_server_url"));
 
       req.headers.origin = reqOrigin;
@@ -82,7 +82,7 @@ let pilot = async () => {
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS",);
 
     if (req.method === "OPTIONS") {
-      console.log(`>>> OPTIONS method: ${req.headers.origin}`)
+      // console.log(`>>> OPTIONS method: ${req.headers.origin}`)
       return res.status(200).end();
     }
 
@@ -95,10 +95,10 @@ let pilot = async () => {
       // console.log(appConfig.get("app:security:allow_origin"));
 
       if (appConfig.get("app:security:allow_origin").indexOf(origin) !== -1) {
-        console.log("cors ctrl: ", origin);
+        // console.log("cors ctrl: ", origin);
         next(null, true);
       } else {
-        console.log(`ERROR:  cors ctrl: not allowed!!: ${origin}`);
+        // console.log(`ERROR:  cors ctrl: not allowed!!: ${origin}`);
         next(new Error('Not allowed by CORS'));
         // next(null, true);
       }

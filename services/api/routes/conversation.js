@@ -10,6 +10,7 @@ import { find, findOne, insertOne, updateOne } from "../server/database";
 import { sendMessage } from "../lib/utils/ws_backend_client";
 import isEmpty from "lodash/get";
 import BlobHelper from "../lib/utils/blobHelper";
+import CryptoHelper from "../lib/utils/cryptoHelper";
 
 const router = Router();
 
@@ -88,7 +89,7 @@ router.get("/myConversations/:beforeTimeMillis", async (req, res) => {
  * 
  *  /sharedFile/{conversationId}/{fileHash}:
  *    get:
- *          description: Returns all messages for the specified conversationId, dated on or before beforeTimeMillis
+ *          description: Returns shared file for the specified conversationId, and file hash
  *          security:
  *              - bearerAuth: []
  *          parameters:
@@ -123,7 +124,6 @@ router.get("/sharedFile/:conversationId/:fileHash", async (req, res) => {
       _id: conversationId,
       'messages.shared_file.fileUri': fileHash,
       user_list: req.user.userId,  // this is very important for security, only messages for user conversations are fetched.
-
     },
     { limit: 1000, sort: [["date_last_update", -1]], projection: { _id: 0, title_text: 1, user_list: 1, 'messages.shared_file': 1 } }
   );
@@ -138,6 +138,72 @@ router.get("/sharedFile/:conversationId/:fileHash", async (req, res) => {
   res.header("Content-Type", "application/png");
   res.write(fileUri);
   res.end();
+});
+
+/**
+ * @swagger
+ * 
+ *  /sharedFileDescriptor/{conversationId}/{fileName}/{fileType}/{fileUri}:
+ *    get:
+ *          description: Returns shared file download token for the specified conversationId, and file descriptor
+ *          security:
+ *              - bearerAuth: []
+ *          parameters:
+ *              - in: path
+ *                name: conversationId
+ *                required: true
+ *                type: string
+ *                description: conversationId for which messages are to be fetched.
+ *              - in: path
+ *                name: fileName
+ *                required: true
+ *                type: string
+ *                description: name of a file.
+ *              - in: path
+ *                name: fileType
+ *                required: true
+ *                type: string
+ *                description: MIME type of a file.
+ *              - in: path
+ *                name: fileUri
+ *                required: true
+ *                type: string
+ *                description: hex hash of file URI.
+ *          responses:
+ *              200:
+ *                  description: TBD * 
+ */
+router.get("/sharedFileDescriptor/:conversationId/:fileName/:fileType/:fileUri", async (req, res) => {
+  let conversationId = req.params["conversationId"];
+  let fileName = req.params["fileName"];
+  let fileType = req.params["fileType"];
+  let fileUri = req.params["fileUri"];
+
+
+  console.log(`conversationId: ${conversationId}`);
+  console.log(`fileName: ${fileName}`);
+  console.log(`fileType: ${fileType}`);
+  console.log(`fileUri: ${fileUri}`);
+
+  let aConversation = await findOne("conversations",
+    {
+      _id: conversationId,
+      'messages.shared_file.fileUri': fileUri,
+      user_list: req.user.userId,  // this is very important for security, only messages for user conversations are fetched.
+    },
+    { limit: 1000, sort: [["date_last_update", -1]], projection: { _id: 0, title_text: 1, user_list: 1, 'messages.shared_file': 1 } }
+  );
+
+  if (!aConversation | isEmpty(aConversation)) {
+    return res.json({});
+  }
+
+  let fileDescrStr = CryptoHelper.ecnryptBlobDownloadDescriptor(req.user.userId, conversationId, fileName, fileType, fileUri);
+
+  let tempObj = {
+    fileDescrStr,
+  }
+  return res.json(tempObj);
 });
 
 
