@@ -5,11 +5,10 @@ import PropTypes from "prop-types";
 import { AntDesign } from '@expo/vector-icons';
 import { MonoText } from './StyledText';
 
-
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { SVUSessionContext } from '../hooks/useSVUSessionContext';
+import { APIActivityInProgress, SVUSessionContext } from '../hooks/useSVUSessionContext';
 
 import { AConversationSummary } from './AConversation';
 import { createNativeWrapper } from 'react-native-gesture-handler';
@@ -19,9 +18,76 @@ const validateEmail = (email) => {
   return re.test(String(email).toLowerCase());
 }
 
+
+const AutoSuggestTextInput = (props) => {
+  const { suggestionList, setAcceptedText } = props;
+  const [currentText, setCurrentText] = React.useState("");
+  const [currentSelection, setCurrentSelection] = React.useState({});
+
+  const __handleChangeText = (newText) => {
+    let suggestedNewText = newText;
+
+    if ((newText.length >= currentText.length) && (!newText.match(/[,|;|\s]$/))) {
+
+      // find the last fragment:
+      let textFrags = newText.split(/,|;|\s/);
+
+      let lastFrag = "";
+      if (textFrags && (textFrags.length > 0)) {
+        lastFrag = textFrags[textFrags.length - 1].trim();
+      }
+
+      if ((lastFrag.length > 0) && !suggestionList.has(lastFrag)) {
+
+        textFrags = textFrags.filter((aFrag) => aFrag.trim().length > 0);
+        let textFragSet = new Set(textFrags);
+        suggestedNewText = textFrags.join(", ");
+        let startSel = suggestedNewText.length;
+
+        for (let aSuggestion of suggestionList.values()) {
+          if (textFragSet.has(aSuggestion)) {
+            continue;
+          }
+          if (lastFrag && aSuggestion.trim().startsWith(lastFrag)) {
+            textFrags[textFrags.length - 1] = aSuggestion;
+            suggestedNewText = textFrags.join(", ");
+            setCurrentSelection({ start: startSel, end: suggestedNewText.length });
+            break;
+          }
+        }
+      }
+    }
+
+    setCurrentText(suggestedNewText);
+    setAcceptedText(suggestedNewText);
+  }
+
+
+  // const __handleSelectionChange = ({ nativeEvent: { selection, text } }) => {
+  //   // console.log(`in __handleSelectionChange - selection: ${selection}`);
+  //   // console.log(`in __handleSelectionChange - text: ${text}`);
+  //   // setCurrentSelection(selection);
+  // };
+
+
+  return (
+    <TextInput
+      value={currentText}
+      selection={currentSelection}
+      multiline={true}
+      // leftIcon={{ type: 'font-awesome', name: 'lock' }}
+      onChangeText={(newText) => { __handleChangeText(newText) }}
+      // onSelectionChange={(selDescrEvent) => { __handleSelectionChange(selDescrEvent) }}
+      placeholder={'Members:'}
+      style={styles.input}
+    />
+  )
+}
+
+
 const CreateConversationModal = (props) => {
-  const { svuSession, APIActivityInProgress, apiCall } = React.useContext(SVUSessionContext);
-  const { createNewConvVisible, setCreateNewConvVisible } = props;
+  const { svuSession, apiCall } = React.useContext(SVUSessionContext);
+  const { createNewConvVisible, setCreateNewConvVisible, contactList } = props;
   const [members, setMembers] = React.useState("");
   const [title, setTitle] = React.useState("");
 
@@ -45,6 +111,7 @@ const CreateConversationModal = (props) => {
 
   const updateUserList = (userList) => {
     let memberEmails = validateUserList(userList);
+    console.log(`len of memberEmails=${memberEmails.length}`);
     if (memberEmails.length < 1) {
       userListValid = false;
     }
@@ -90,13 +157,7 @@ const CreateConversationModal = (props) => {
       >
         <View style={styles.modalView}>
           <Text style={styles.modalText}>New Conversation</Text>
-          <TextInput
-            value={members}
-            // leftIcon={{ type: 'font-awesome', name: 'lock' }}
-            onChangeText={(members) => { updateUserList(members) }}
-            placeholder={'Members:'}
-            style={styles.input}
-          />
+          <AutoSuggestTextInput suggestionList={contactList} setAcceptedText={updateUserList} />
 
           <TextInput
             value={title}
@@ -107,47 +168,154 @@ const CreateConversationModal = (props) => {
           />
 
           <View style={styles.centeredModalViewHorizontal}>
-            <TouchableHighlight
+            <TouchableOpacity
+              onPress={() => setCreateNewConvVisible(!createNewConvVisible)}
+              style={[styles.svuButton, { width: 100, backgroundColor: 'whit', }]}>
+              <Text style={styles.touchableButttons}>
+                {/* <AntDesign name="pluscircle" size={24} color="rgb(33, 150, 243)" /> */}
+                <AntDesign name="closecircleo" size={24} color="rgb(33, 150, 243)" />
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => createNewConversation()}
+              style={[styles.svuButton, { backgroundColor: 'whit', width: 100 }]}>
+              <Text style={styles.touchableButttons}>
+                {/* <AntDesign name="pluscircle" size={24} color="rgb(33, 150, 243)" /> */}
+                <AntDesign name="checkcircleo" size={24} color="rgb(33, 150, 243)" />
+              </Text>
+            </TouchableOpacity>
+
+            {/* <TouchableHighlight
               style={[styles.svuButton, { width: 100, borderColor: 'red', borderWidth: 2, backgroundColor: 'whit', color: 'red', }]}
               onPress={() => setCreateNewConvVisible(!createNewConvVisible)}
               underlayColor='rgb(128, 180, 220)'>
               <Text style={[styles.svuButtonText, { color: 'red' }]}>Cancel</Text>
             </TouchableHighlight>
 
+            
             <TouchableHighlight
               style={[styles.svuButton, { width: 100 }]}
               onPress={() => createNewConversation()}
               underlayColor='rgb(128, 180, 220)'>
               <Text style={styles.svuButtonText}>Start</Text>
-            </TouchableHighlight>
+            </TouchableHighlight> */}
           </View>
         </View>
+        <APIActivityInProgress />
       </Modal>
     </View >
   )
 };
 
-CreateConversationModal.propTypes = {
-  createNewConvVisible: PropTypes.bool,
-  setCreateNewConvVisible: PropTypes.func,
-};
 
-CreateConversationModal.defaultProps = {
-  createNewConvVisible: false,
-  setCreateNewConvVisible: null,
+const LogoutAllDevicesModal = (props) => {
+  const { svuSession, doLogout } = React.useContext(SVUSessionContext);
+  const { logoutAllDevicesVisible, setLogoutAllDevicesVisible } = props;
+  const [userId, setUserId] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+
+  if (!logoutAllDevicesVisible) {
+    return null;
+  }
+
+
+  const logoutAllDevices = async () => {
+    await doLogout(userId, password);
+    return setLogoutAllDevicesVisible(false);
+  }
+
+  return (
+    <View style={styles.centeredModalView}>
+      <Modal
+        visible={logoutAllDevicesVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => { setLogoutAllDevicesVisible(false) }} //for android hardware back
+        style={styles.centeredModalView}
+      >
+
+
+
+        <View style={styles.modalView}>
+
+          <View style={[styles.centeredModalViewVertical, { flex: 2 }]}>
+
+            <Text style={{ fontSize: "18pt", fontWeight: "bold", color: "red", height: "auto", textAlign: "center", marginBottom: 40 }}> Logout All Devices </Text>
+
+            <Text style={{ fontSize: "12pt", fontWeight: "bold", color: "darkred", height: "auto", textAlign: "center", marginBottom: 20 }}> If you proceed, your sessions on all of your logged in devices will be terminated.  </Text>
+
+            <Text style={{ fontSize: "12pt", fontWeight: "bold", color: "darkred", height: "auto" }}> If you want to logout only on this device, just reload or terminate the browser.  </Text>
+
+            <View style={[styles.leftDecoratedContainer, { flex: 1 }]}>
+              <View style={[styles.input, { flex: 0.17, borderWidth: 0, paddingTop: 4 }]}>
+                <MaterialIcons name="email" size={24} color="black" />
+              </View>
+              <View style={{ flex: 1, }}>
+                <TextInput
+                  value={userId}
+                  // leftIcon={{ type: 'font-awesome', name: 'lock' }}
+                  onChangeText={(username) => { setUserId(username) }}
+                  placeholder={'Username'}
+                  style={styles.input}
+                />
+              </View>
+            </View>
+            <View style={[styles.leftDecoratedContainer, { flex: 1 }]}>
+              <View style={[styles.input, { flex: 0.17, borderWidth: 0, paddingTop: 4 }]}>
+                <MaterialCommunityIcons name="form-textbox-password" size={24} color="black" />
+              </View>
+              <View style={{ flex: 1, }}>
+                <TextInput
+                  value={password}
+                  onChangeText={(password) => { setPassword(password) }}
+                  placeholder={'Password'}
+                  secureTextEntry={true}
+                  style={styles.input}
+                />
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.centeredModalViewHorizontal}>
+            <TouchableOpacity
+              onPress={() => { setLogoutAllDevicesVisible(!logoutAllDevicesVisible) }}
+              style={[styles.svuButton, { width: 100, backgroundColor: 'whit', }]}>
+              <Text style={styles.touchableButttons}>
+                {/* <AntDesign name="pluscircle" size={24} color="rgb(33, 150, 243)" /> */}
+                <AntDesign name="closecircleo" size={24} color="rgb(33, 150, 243)" />
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => { logoutAllDevices() }}
+              style={[styles.svuButton, { backgroundColor: 'whit', width: 100 }]}>
+              <Text style={styles.touchableButttons}>
+                {/* <AntDesign name="pluscircle" size={24} color="rgb(33, 150, 243)" /> */}
+                <AntDesign name="checkcircleo" size={24} color="rgb(33, 150, 243)" />
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+        </View>
+        <APIActivityInProgress />
+
+      </Modal>
+    </View >
+  )
 };
 
 
 export function ConversationList(props) {
-  const { svuSession, APIActivityInProgress, doLogin } = React.useContext(SVUSessionContext);
+  const { svuSession, doLogout } = React.useContext(SVUSessionContext);
   const { setActiveConversationId } = props;
 
   // console.log("svuSession", svuSession);
   const [createNewConvVisible, setCreateNewConvVisible] = React.useState(false);
+  const [logoutAllDevicesVisible, setLogoutAllDevicesVisible] = React.useState(false);
 
   // console.log(`createNewConvVisible: ${createNewConvVisible}`)
-
-  const newConvModal = (<CreateConversationModal createNewConvVisible={createNewConvVisible} setCreateNewConvVisible={setCreateNewConvVisible} />)
 
   const convArr = Object.values(svuSession.conversations).sort((a, b) => {
     // console.log(a.date_last_updated , b.date_last_updated);
@@ -162,6 +330,25 @@ export function ConversationList(props) {
     }
   });
   // console.log("convArr", convArr);
+
+  // getting the set of all previous contacts from the conv array:
+  const __reduceContacts = (prevSet, aUserId) => {
+    if (aUserId) {
+      prevSet.add(aUserId.trim());
+    }
+    return prevSet;
+  };
+
+  let contactList = new Set();
+  convArr.forEach((aUserList) => {
+    aUserList.user_list.reduce(__reduceContacts, contactList);
+  });
+  // console.log(contactList);
+  contactList.delete(svuSession.userId);
+
+  const logoutAllDevicesModal = (<LogoutAllDevicesModal logoutAllDevicesVisible={logoutAllDevicesVisible} setLogoutAllDevicesVisible={setLogoutAllDevicesVisible} />)
+
+  const newConvModal = (<CreateConversationModal createNewConvVisible={createNewConvVisible} setCreateNewConvVisible={setCreateNewConvVisible} contactList={contactList} />)
 
   const convs = convArr.map((aRecip) => {
     return (<AConversationSummary
@@ -181,11 +368,21 @@ export function ConversationList(props) {
       </ScrollView>
 
       <View style={styles.bottomBar}>
+
+        <TouchableOpacity
+          onPress={() => { setLogoutAllDevicesVisible(true) }}
+          style={[styles.svuButton, { width: 100, backgroundColor: 'whit', marginLeft: 12, }]}>
+          <Text style={styles.touchableButttons}>
+            <MaterialCommunityIcons name="exit-run" size={24} color="rgb(33, 150, 243)" />
+          </Text>
+        </TouchableOpacity>
+
         <TouchableOpacity
           onPress={() => { setCreateNewConvVisible(true) }}
-          style={{}}>
+          style={[styles.svuButton, { width: 100, backgroundColor: 'whit', marginRight: 12, }]}>
           <Text style={styles.touchableButttons}>
-            <AntDesign name="pluscircle" size={24} color="rgb(33, 150, 243)" />
+            {/* <AntDesign name="pluscircle" size={24} color="rgb(33, 150, 243)" /> */}
+            <AntDesign name="form" size={24} color="rgb(33, 150, 243)" />
           </Text>
         </TouchableOpacity>
       </View>
@@ -193,9 +390,13 @@ export function ConversationList(props) {
   )
 
   let convElemOnDisplay = convList;
+
   if (createNewConvVisible) {
     convElemOnDisplay = newConvModal
+  } else if (logoutAllDevicesVisible) {
+    convElemOnDisplay = logoutAllDevicesModal
   }
+
   return (
     <View style={styles.container}>
       {convElemOnDisplay}
@@ -231,10 +432,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
 
+  topBar: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    marginTop: 4,
+  },
+
   bottomBar: {
-    flexDirection: 'column',
+    width: '100%',
+    height: 48,
+    flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginBottom: 36
+    marginBottom: 4
   },
 
   developmentModeText: {
@@ -245,10 +455,50 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
+
+  leftDecoratedContainer: {
+    flex: 1,
+    // height: 48,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    paddingVertical: "10",
+    alignSelf: 'center',
+    alignItems: 'center',
+    // backgroundColor: '#ecf0f1',
+    margin: 10,
+  },
+
+
+  // svuButton: {
+  //   width: 240,
+  //   height: 42,
+  //   padding: 10,
+  //   borderWidth: 1,
+  //   borderColor: 'black',
+  //   marginBottom: 10,
+  //   backgroundColor: 'rgb(33, 150, 243)',
+  //   borderRadius: 4,
+  //   borderWidth: 1,
+  //   borderColor: '#fff',
+  //   margin: 'auto',
+  // },
+  // svuButtonText: {
+  //   color: 'white',
+  //   textAlign: 'center',
+  //   fontSize: 14,
+  //   fontWeight: 'bold',
+  // },
+
+
   svuButton: {
+    flexDirection: 'column',
+    justifyContent: 'center',
     width: 240,
-    height: 42,
-    padding: 10,
+    height: 32,
+    padding: 8,
+    textAlignVertical: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
     borderWidth: 1,
     borderColor: 'black',
     marginBottom: 10,
@@ -266,7 +516,10 @@ const styles = StyleSheet.create({
   },
 
 
+
+
   input: {
+    // flex: 1,
     width: '85%',
     height: 32,
     paddingHorizontal: 10,
@@ -341,6 +594,18 @@ const styles = StyleSheet.create({
     marginTop: 22,
     justifyContent: 'space-between',
   },
+
+  centeredModalViewVertical: {
+    flex: 0.1,
+    height: '80%',
+    borderWidth: 0,
+    flexDirection: 'column',
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+    justifyContent: 'space-between',
+  },
+
 
   modalView: {
     flex: 1,

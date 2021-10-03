@@ -12,14 +12,12 @@ import { FontAwesome } from '@expo/vector-icons';
 import { MonoText } from '../components/StyledText';
 // import { UserInterfaceIdiom } from 'expo-constants';
 
-import { SVUSessionContext } from '../hooks/useSVUSessionContext';
+import { APIActivityInProgress, SVUSessionContext } from '../hooks/useSVUSessionContext';
 import { LoginForm } from '../components/Login';
 import { SignupForm } from '../components/Signup';
 
-
-
 export default function SessionScreen() {
-  const { svuSession, APIActivityInProgress, APIError, doLogin } = React.useContext(SVUSessionContext);
+  const { svuSession, APIError, doLogin } = React.useContext(SVUSessionContext);
   const [userId, setUserId] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [signupInProgress, setSignupInProgress] = React.useState(false);

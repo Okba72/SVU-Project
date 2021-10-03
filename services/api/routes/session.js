@@ -165,6 +165,7 @@ router.post("/logoutAllDevices", async (req, res) => {
 
     await updateOne("users", { user_id: userId }, { $set: { jwt_id: "" } });
 
+    console.log(`logged out on all devices for ${userId} `)
     return res.json(responsePayload);
 })
 

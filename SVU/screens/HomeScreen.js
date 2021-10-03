@@ -7,11 +7,11 @@ import { MonoText } from '../components/StyledText';
 
 import { ConversationList } from '../components/ConversationList';
 import { AConversation } from '../components/AConversation';
-import { SVUSessionContext } from '../hooks/useSVUSessionContext';
+import { APIActivityInProgress, SVUSessionContext } from '../hooks/useSVUSessionContext';
 
 
 export default function HomeScreen() {
-  const { svuSession, APIActivityInProgress, doLogin } = React.useContext(SVUSessionContext);
+  const { svuSession, doLogin } = React.useContext(SVUSessionContext);
 
   //state
   const [activeConversationId, setActiveConversationId] = React.useState(null);
@@ -31,6 +31,7 @@ export default function HomeScreen() {
         />
       </View>
       {displayComponent}
+      <APIActivityInProgress style={{ zIndex: 100, }} />
     </View>
   );
 }

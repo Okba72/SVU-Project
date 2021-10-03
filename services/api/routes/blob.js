@@ -67,29 +67,6 @@ router.get("/:token", async (req, res) => {
 
     console.log(fileDescr);
   
-    // // console.log(`conversationId ${conversationId}`);
-    // // console.log(`type of conversationId ${typeof (conversationId)}`);
-    // // console.log(`fileHash ${fileHash}`);
-    // // console.log(`type of fileHash ${typeof (fileHash)}`);
-  
-    // // console.log(`req.user.userId is: ${req.user.userId}`);
-  
-    // let aConversation = await findOne("conversations",
-    //   {
-    //     _id: conversationId,
-    //     'messages.shared_file.fileUri': fileHash,
-    //     user_list: req.user.userId,  // this is very important for security, only messages for user conversations are fetched.
-    //   },
-    //   { limit: 1000, sort: [["date_last_update", -1]], projection: { _id: 0, title_text: 1, user_list: 1, 'messages.shared_file': 1 } }
-    // );
-  
-    // if (!aConversation | isEmpty(aConversation)) {
-    //   return res.json({});
-    // }
-  
-  
-    // let fileUri = await BlobHelper.readFile(fileHash);
-  
     let fileUri = await BlobHelper.readFile(fileDescr.fileUri);
 
     fileUri = fileUri.replace(/\"/g, "");
@@ -98,10 +75,8 @@ router.get("/:token", async (req, res) => {
     let re = new RegExp("^data:(.*),(.*)$");
     let matches = re.exec(fileUri);
 
-    // res.header("Content-Type", "data:image/png;base64");
     res.header("Content-Type", matches[1]);
     res.header("X-Content-Type-Options",  "nosniff");
-    // res.setHeader("Content-Disposition", `attachment; filename=${fileDescr.fileName}`);
 
     // console.log(matches[1]);
     // console.log(matches[2]);

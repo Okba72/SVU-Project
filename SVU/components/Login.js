@@ -8,11 +8,10 @@ import { SVUSessionContext } from '../hooks/useSVUSessionContext';
 
 
 export function LoginForm() {
-  const { svuSession, APIActivityInProgress, doLogin } = React.useContext(SVUSessionContext);
+  const { svuSession, doLogin } = React.useContext(SVUSessionContext);
   const [userId, setUserId] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  console.log(`svuSession.apiActivityInProgress: ${svuSession.apiActivityInProgress}`)
   return (
     <View style={styles.container}>
       <View style={styles.leftDecoratedContainer}>

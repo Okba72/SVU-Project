@@ -75,12 +75,6 @@ class CryptoHelper {
      * @param {*} narText 
      */
     ecnryptNaRAttributes(userId, narText) {
-        // let cipher = crypto.createCipheriv("aes-256-cbc", this.secretKey, this.iv);
-
-        // let cipherText = "";
-        // cipherText += cipher.update(userId.concat(":", narText), "utf8", "hex");
-        // cipherText += cipher.final("hex");
-
         let clearBuff = Buffer.from(userId.concat(":", narText), "utf8");
         let cipherBuff = crypto.publicEncrypt(this.secretKey, clearBuff);
 
@@ -97,14 +91,6 @@ class CryptoHelper {
         let clearBuff = crypto.privateDecrypt(this.secretKey, cipherBuff);
 
         return clearBuff.toString("utf8");
-
-
-        // let decipher = crypto.createDecipher("aes-256-cbc", this.secretKey);
-        // let clearText = "";
-        // clearText += decipher.update(userId.concat(":", narText), "hex", "utf8");
-        // clearText += decipher.final("utf8");
-
-        // return clearText;
     }
 
 
@@ -138,13 +124,12 @@ class CryptoHelper {
         let blobDescr = JSON.parse(clearBuff);
 
         // console.log(`fileDescr clear: ${clearBuff}`);
-        // if (blobDescr.expireIn < (new Date().getTime())) {
-        //     return null;
-        // } else {
-        //     return blobDescr;
-        // }
+        if (blobDescr.expireIn < (new Date().getTime())) {
+            return null;
+        } else {
+            return blobDescr;
+        }
 
-        return blobDescr;
     }
 
     /**

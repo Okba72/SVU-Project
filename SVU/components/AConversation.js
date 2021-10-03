@@ -14,8 +14,7 @@ import { MonoText } from '../components/StyledText';
 import { MaterialIcons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { SVUSessionContext } from '../hooks/useSVUSessionContext';
-
+import { APIActivityInProgress, SVUSessionContext } from '../hooks/useSVUSessionContext';
 export function AConversationSummary(props) {
   const { conversationId, recipients, titleText, unread, setActiveConversationId } = props;
 
@@ -170,12 +169,8 @@ export function AMessage(props) {
 
 
 export function AConversation(props) {
-  // const { svuSession, APIActivityInProgress, doLogin } = React.useContext(SVUSessionContext);
-  // const [userId, setUserId] = React.useState("");
-  // const [password, setPassword] = React.useState("");
-
   const { activeConversationId, setActiveConversationId } = props;
-  const { svuSession, APIActivityInProgress, apiCall } = React.useContext(SVUSessionContext);
+  const { svuSession, apiCall } = React.useContext(SVUSessionContext);
   const [newMessageText, setNewMessageText] = React.useState("");
   const [doc, setDoc] = React.useState(null);
 
@@ -298,19 +293,37 @@ export function AConversation(props) {
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        <TouchableHighlight
+        <TouchableOpacity
+          onPress={() => { setActiveConversationId("") }}
+          style={[styles.svuButton, { width: 100, backgroundColor: 'whit', marginLeft: 12, }]}>
+          <Text style={styles.touchableButttons}>
+            <AntDesign name="back" size={24} color="rgb(33, 150, 243)" />
+          </Text>
+        </TouchableOpacity>
+
+        {/* <TouchableHighlight
           style={[styles.svuButton, { width: 100, marginLeft: 12, }]}
           onPress={() => setActiveConversationId("")}
           underlayColor='rgb(128, 180, 220)'>
           <Text style={[styles.svuButtonText]}>Back</Text>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
 
-        <TouchableHighlight
+
+
+        <TouchableOpacity
+          onPress={() => leaveConversation()}
+          style={[styles.svuButton, { width: 100, backgroundColor: 'whit', marginRight: 12, }]}>
+          <Text style={styles.touchableButttons}>
+            <MaterialCommunityIcons name="logout" size={24} color="rgb(33, 150, 243)" />
+          </Text>
+        </TouchableOpacity>
+
+        {/* <TouchableHighlight
           style={[styles.svuButton, { width: 100, borderColor: 'red', borderWidth: 2, backgroundColor: 'whit', color: 'red', marginRight: 12, }]}
           onPress={() => leaveConversation()}
           underlayColor='rgb(128, 180, 220)'>
           <Text style={[styles.svuButtonText, { color: 'red' }]}>Leave</Text>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
       </View>
 
       <ScrollView style={styles.conversationListContainer} contentContainerStyle={styles.conversationListContent}>
@@ -318,12 +331,20 @@ export function AConversation(props) {
       </ScrollView>
 
       <View style={styles.bottomBar}>
-        <TouchableHighlight
+        <TouchableOpacity
+          onPress={() => pickDocument()}
+          style={[styles.svuButton, { width: "auto", backgroundColor: 'whit', marginLeft: 4, }]}>
+          <Text style={styles.touchableButttons}>
+            <AntDesign name="addfile" size={24} color="rgb(33, 150, 243)" />
+          </Text>
+        </TouchableOpacity>
+
+        {/* <TouchableHighlight
           style={[styles.svuButton, { width: 'auto', height: 48, marginRight: 4, }]}
           onPress={() => pickDocument()}
           underlayColor='rgb(128, 180, 220)'>
           <Text style={[styles.svuButtonText]}>Upload</Text>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
 
 
         <TextInput
@@ -334,13 +355,22 @@ export function AConversation(props) {
           style={[styles.input, { flexGrow: 1, marginLeft: 4, marginRight: 4 }]}
         />
 
-        <TouchableHighlight
+        <TouchableOpacity
+          onPress={() => sendMessage()}
+          style={[styles.svuButton, { width: 'auto', backgroundColor: 'whit', marginRight: 12, }]}>
+          <Text style={styles.touchableButttons}>
+            <AntDesign name="clouduploado" size={24} color="rgb(33, 150, 243)" />
+          </Text>
+        </TouchableOpacity>
+
+        {/* <TouchableHighlight
           style={[styles.svuButton, { width: 'auto', height: 48, marginRight: 4, }]}
           onPress={() => sendMessage()}
           underlayColor='rgb(128, 180, 220)'>
           <Text style={[styles.svuButtonText]}>Send</Text>
-        </TouchableHighlight>
+        </TouchableHighlight> */}
       </View>
+      <APIActivityInProgress />
     </View>
   );
 }

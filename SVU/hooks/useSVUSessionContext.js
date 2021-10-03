@@ -98,7 +98,31 @@ export const SVUSessionProvider = props => {
 
   const [svuSession, dispatchSessionUpdate] = React.useReducer(sessionReducer, initSVUSessionContext);
 
-  const doLogout = (logoutAllDevices = false) => {
+  const doLogout = async (userId, password) => {
+    if (!(userId && password)) {
+      return;
+    }
+
+    let payload = {
+      userId: userId,
+      password: password,
+    }
+
+    try {
+      let loginResponse = await apiCall("/session/logoutAllDevices", payload);
+      let sessionUpdateAction = {
+        type: "API_CALL",
+        newState: initSVUSessionContext,
+      }
+
+      dispatchSessionUpdate(sessionUpdateAction);
+
+      playSound();
+
+    } catch (error) {
+      console.log(`loginResponse Error: ${error}`);
+    }
+
   }
 
 
@@ -336,30 +360,6 @@ export const SVUSessionProvider = props => {
     return response;
   };
 
-  /**
-   * This is a spinner that is to be displayed overlayed during API activities:
-   */
-  const APIActivityInProgress = () => {
-    if (svuSession.apiActivityInProgress) {
-      return (<View style={{
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
-        opacity: 0.7,
-        backgroundColor: 'rgba(240,240,240,02)',
-        justifyContent: 'center',
-        alignItems: 'center'
-      }}>
-        <ActivityIndicator size="large" />
-      </View >
-      )
-    } else {
-      return null
-    }
-  }
-
 
   const APIError = () => {
 
@@ -451,11 +451,51 @@ export const SVUSessionProvider = props => {
 
 
   // pass the init context value in provider and return
-  return (<SVUSessionContext.Provider value={{ svuSession, APIActivityInProgress, APIError, doLogin, doLogout, apiCall, }}>{children}</SVUSessionContext.Provider>);
+  return (<SVUSessionContext.Provider value={{ svuSession, APIError, doLogin, doLogout, apiCall, }}>{children}</SVUSessionContext.Provider>);
 };
 
 
 export const { Consumer } = SVUSessionProvider;
+
+/**
+ * This is a spinner that is to be displayed overlayed during API activities:
+ */
+export const APIActivityInProgress = () => {
+  const { svuSession } = React.useContext(SVUSessionContext);
+  const [apiActivityInProgressVisible, setApiActivityInProgressVisible] = React.useState(svuSession.apiActivityInProgress);
+
+  /**
+  * The following hook will load conversations as needed (upon login)
+  */
+  React.useEffect(
+    () => {
+      setApiActivityInProgressVisible(svuSession.apiActivityInProgress);
+      return;
+    }, [svuSession.apiActivityInProgress]
+  )
+
+  console.log(`\n\n\n*** ${apiActivityInProgressVisible}  ****\n\n`)
+  if (apiActivityInProgressVisible) {
+    return (<View style={{
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      opacity: 0.7,
+      backgroundColor: 'rgba(240,240,240,02)',
+      justifyContent: 'center',
+      alignItems: 'center'
+    }}>
+      <ActivityIndicator size="large" />
+    </View >
+    )
+  } else {
+    return null
+  }
+}
+
+
 
 SVUSessionProvider.propTypes = {
   apiUrl: PropTypes.string,

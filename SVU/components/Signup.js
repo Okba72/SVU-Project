@@ -16,7 +16,7 @@ import { SVUSessionContext } from '../hooks/useSVUSessionContext';
 
 export function SignupForm(props) {
   const { setSignupInProgress } = props;
-  const { svuSession, APIActivityInProgress, doLogin, apiCall } = React.useContext(SVUSessionContext);
+  const { svuSession, doLogin, apiCall } = React.useContext(SVUSessionContext);
   const [userId, setUserId] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
@@ -135,7 +135,6 @@ export function SignupForm(props) {
   }
 const narComponent = getNarControlsComponent();
 
-console.log(`svuSession.apiActivityInProgress: ${svuSession.apiActivityInProgress}`)
 return (
   <View style={styles.container}>
     <View style={styles.leftDecoratedContainer}>
