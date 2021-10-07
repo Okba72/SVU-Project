@@ -51,7 +51,7 @@ let pilot = async () => {
   // app.use(bodyParser.urlencoded({ extended: false, limit: "50mb" }));
 
   app.use(express.json({ limit: "50mb" }));
-  app.use(express.urlencoded({ limit: "50mb" }));
+  app.use(express.urlencoded({ extended: false, limit: "50mb" }));
 
   // setup CORS middleware:
   app.use((req, res, next) => {

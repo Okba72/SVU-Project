@@ -6,6 +6,10 @@ import useCachedResources from './hooks/useCachedResources';
 import SVURouter from './navigation/SVURouter';
 import { SVUSessionProvider } from './hooks/useSVUSessionContext';
 
+import Constants from 'expo-constants';
+
+console.log(Constants.manifest.extra.enableComments);
+
 const Stack = createStackNavigator();
 
 export default function App(props) {
@@ -16,7 +20,7 @@ export default function App(props) {
   } else {
     return (
       <View style={styles.container}>
-        <SVUSessionProvider apiUrl='https://localhost/svu/api' wsUrl='wss://localhost:18001'>
+        <SVUSessionProvider apiUrl={Constants.manifest.extra.apiUrl} wsUrl={Constants.manifest.extra.wsUrl}>
           <SVURouter />
         </SVUSessionProvider>
       </View>

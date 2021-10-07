@@ -474,7 +474,6 @@ export const APIActivityInProgress = () => {
     }, [svuSession.apiActivityInProgress]
   )
 
-  console.log(`\n\n\n*** ${apiActivityInProgressVisible}  ****\n\n`)
   if (apiActivityInProgressVisible) {
     return (<View style={{
       position: 'absolute',

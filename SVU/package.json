@@ -4,11 +4,12 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web --https",
+    "web": "expo start --web --https --dev",
     "web-prod": "expo start --web --no-dev --https",
     "eject": "expo eject",
     "test": "jest --watchAll"
   },
+  "homepage": "/svu/app",
   "jest": {
     "preset": "jest-expo"
   },
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",
+    "@expo/webpack-config": "^0.16.2",
     "babel-preset-expo": "8.3.0",
     "jest-expo": "^42.0.0"
   },
