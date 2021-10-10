@@ -4,8 +4,8 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web --https --dev",
-    "web-prod": "expo start --web --no-dev --https",
+    "web": "BUILD_MODE=dev expo start --web --https --dev",
+    "web-prod": "BUILD_MODE=prod expo start --web --no-dev --https",
     "eject": "expo eject",
     "test": "jest --watchAll"
   },
