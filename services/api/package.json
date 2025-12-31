@@ -15,10 +15,10 @@
   "author": "Ouqbah Ismael",
   "license": "UNLICENSED",
   "dependencies": {
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.4",
     "cors": "^2.8.5",
     "esm": "^3.2.25",
-    "express": "^4.17.1",
+    "express": "^4.22.1",
     "express-openapi-validate": "^0.5.1",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
